@@ -1,0 +1,47 @@
+{
+    "basic": {
+        "wifi": {
+            "ssids": [
+                {
+                    "ssid": "TP-LINK",
+                    "signal_level": "high/middle/low",
+                    "signal_dbm": -37,
+                    "status": true
+                },
+                {
+                    "ssid": "TP-LINK_2",
+                    "signal_level": "high/middle/low",
+                    "signal_dbm": -60,
+                    "status": false
+                }
+            ],
+            "ip": "192.168.20.100",
+            "mac": "00:1A:2B:3C:4D:5E",
+            "enabled": true
+        }
+    },
+    "advanced": {
+        "mic": {
+            "staff_horizon": 45,
+            "staff_vertical": 120,
+            "customer_horizontal": 45,
+            "customer_vertical": 45
+        },
+        "distance_gauge": {
+            "max": 200,
+            "min": 1,
+            "time": 10,
+            "enabled": true,
+            "set": 80
+        },
+        "server": {
+            "domain": "",
+            "ip": "",
+            "port": 8080
+        },
+        "wired": {
+            "mac": "00:1A:2B:3C:4D:5E",
+            "ip": "192.168.20.100"
+        }
+    }
+}
