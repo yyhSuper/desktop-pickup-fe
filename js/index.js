@@ -1,5 +1,7 @@
 $(document).ready(function () {
     var base_url = "http://192.168.2.1";
+
+    var audio_download_url = "";
     //待更新config
     var updatedConfig_ = {
         basic: {
@@ -103,12 +105,29 @@ $(document).ready(function () {
             }
         }
     }
-    var initialConfig = testJSON;
-    console.log("初始化配置", initialConfig);
-    initializeForm(initialConfig);
+    var initialConfig = {};
+    $.ajax({
+        url: base_url + "/config",
+        type: "GET",
+        contentType: "application/json",
+        success: function (response) {
+            console.log("获取配置成功",response)
+            initialConfig=response
+            // console.log("初始化配置", response);
+            initializeForm(initialConfig);
+        },
+        error: function (err) {
+            console.error("获取配置失败", err);
+
+        }
+    });
+    // initialConfig=testJSON
+
+
 
     // 初始化表单
     function initializeForm(config) {
+        console.log("初始化配置",config)
         // 初始化WiFi列表
         var wifiListContainer = $('#wifi-list');
         wifiListContainer.empty(); // 清空WiFi列表容器
@@ -128,7 +147,7 @@ $(document).ready(function () {
 
             var select_img = " <img src=\"img/selected.png\" alt=\"\">"
             //判断.status是否包含div.checked ,如果包含则删除，如果不包含则添加select_img,并且把把其他非连接的div.status删除
-            console.log("当前点击的wifi22", isHasChecked);
+            console.log("当前点击的wifi", isHasChecked);
 
 
 
@@ -192,13 +211,17 @@ $(document).ready(function () {
 
         if(config.advanced.wired.mac){
             $('#wired_mac').val(config.advanced.wired.mac);
+            $("#wired_mac_error").hide()
         }else {
             $("#wired_mac_error").text('未连接').show()
+            $("#wired_mac").hide()
         }
         if(config.advanced.wired.ip){
             $('#wired_ip').val(config.advanced.wired.ip);
+            $("#wired_ip_error").hide()
         }else {
             $("#wired_ip_error").text('未连接').show()
+            $("#wired_ip").hide()
         }
 
     }
@@ -207,7 +230,35 @@ $(document).ready(function () {
     $('#basic-reset, #advanced-reset').click(function () {
         initializeForm(initialConfig);
     });
+//download_Mp3
+$("#download_Mp3").click(function (event) {
+    console.log("开始下载")
 
+    $.ajax({
+        url: 'http://192.168.2.1/record/download',
+        type: 'GET',
+        dataType: 'binary',
+        xhrFields: {
+            responseType: 'blob'
+        },
+        processData: false,
+        success: function(data, status, xhr) {
+            var blob = new Blob([data], { type: 'audio/mpeg' });
+            var url = window.URL.createObjectURL(blob);
+            var a = document.createElement('a');
+            a.style.display = 'none';
+            a.href = url;
+            var filename = xhr.getResponseHeader('Content-Disposition').split('filename=')[1].trim();
+            a.download = filename ? filename : 'recording.mp3';
+            document.body.appendChild(a);
+            a.click();
+            window.URL.revokeObjectURL(url);
+        },
+        error: function(xhr, status, error) {
+            console.error('下载失败:', error);
+        }
+    });
+});
     //密码输入框事件
     $("#wifi_password").on('input', function (e) {
         updatedConfig_.basic.wifi.password = e.delegateTarget.value;
@@ -223,8 +274,11 @@ $(document).ready(function () {
     //distance_gauge_set 感应距离设置
     $("#distance_gauge_set").on('input', function (e) {
         if(e.delegateTarget.value>200||e.delegateTarget.value<1){
-            e.delegateTarget.value = "";
-            $("#distance_gauge_set_error").show()
+            if (e.delegateTarget.value!=""){
+                // e.delegateTarget.value = "";
+                $("#distance_gauge_set_error").show()
+            }
+
         }else{
             $("#distance_gauge_set_error").hide()
             updatedConfig_.advanced.distance_gauge.set = e.delegateTarget.value;
@@ -235,8 +289,11 @@ $(document).ready(function () {
     //distance_gauge_time 感应时间
     $("#distance_gauge_time").on('input', function (e) {
        if(e.delegateTarget.value>60||e.delegateTarget.value<1){
-           $("#distance_gauge_time_error").show()
-           e.delegateTarget.value = "";
+           if(e.delegateTarget.value!=""){
+               $("#distance_gauge_time_error").show()
+               // e.delegateTarget.value = "";
+           }
+
        }else{
            $("#distance_gauge_time_error").hide()
            updatedConfig_.advanced.distance_gauge.time = e.delegateTarget.value;
@@ -318,6 +375,7 @@ $('#staff_horizon div').on('click', function () {
 $('#staff_vertical div').on('click', function () {
     $(this).addClass('active').siblings().removeClass('active')
     var angle = $(this).find('span').text();
+    // console.log(angle)
     console.log("当前点击的职员方向垂直拾音角度", updatedConfig_);
     updatedConfig_.advanced.mic.staff_vertical = parseInt(angle);
 });
@@ -352,6 +410,7 @@ $('#customer_vertical div').on('click', function () {
         //判断服务器域名、IP、端口如果非空时是否符合正则
 
         if (validateServerDetails(updatedConfig_.advanced.server.domain, updatedConfig_.advanced.server.ip, updatedConfig_.advanced.server.port)) {
+           
             submitForm()
         } else {
             alert("请检查服务器域名、IP、端口是否正确")
@@ -380,11 +439,17 @@ $('#customer_vertical div').on('click', function () {
 
     //提交表单
     function submitForm() {
+        var defaultSsid=initialConfig.basic.wifi.ssids.filter(ssid=>ssid.status===true)
+        if(defaultSsid.length>0){
+            defaultSsid=defaultSsid[0].ssid
+        }else{
+            defaultSsid=null
+        }
      
         var updatedConfig = {
             basic: {
                 wifi: {
-                    ssid: updatedConfig_.basic.wifi.ssid ||initialConfig.basic.wifi.ssids.filter(ssid=>ssid.status===true)[0].ssid,
+                    ssid: updatedConfig_.basic.wifi.ssid ||defaultSsid!=undefined&&defaultSsid!=null?defaultSsid:"",
                     password: updatedConfig_.basic.wifi.password || $('#wifi_password').val(),
                     enabled: $('#wifi_enabled').is(':checked')
                 }
@@ -414,7 +479,7 @@ $('#customer_vertical div').on('click', function () {
         };
         console.log("提交表单", updatedConfig);
         // 发送更新配置的请求
-        /*$.ajax({
+        $.ajax({
             url: base_url + "/config",
             type: "POST",
             contentType: "application/json",
@@ -422,6 +487,23 @@ $('#customer_vertical div').on('click', function () {
             success: function (response) {
                 if (response.result === 0) {
                     alert("配置提交成功");
+                    $.ajax({
+                        url: base_url + "/restart",
+                        type: "POST",
+                        contentType: "application/json",
+                        data: JSON.stringify(updatedConfig),
+                        success: function (response) {
+                            if (response.result === 0) {
+                                console.log("重启成功");
+                            } else {
+                                console.log("重启失败");
+                            }
+                        },
+                        error: function (err) {
+                            console.error("重启失败", err);
+                           
+                        }
+                    });
                 } else {
                     alert("配置提交失败");
                 }
@@ -430,7 +512,7 @@ $('#customer_vertical div').on('click', function () {
                 console.error("配置提交失败", err);
                 alert("配置提交失败");
             }
-        });*/
+        });
     }
 
     // 设置麦克风角度函数
@@ -466,76 +548,124 @@ $('#customer_vertical div').on('click', function () {
         });
     }
 
-    // 初始化音频上下文
-    function startAudioContext() {
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+    
+
+
+
+    //计算时间函数，点击按钮之后就开始计时，停止之后清理定时器
+    let timerInterval;
+    let seconds = 0;
+
+    function startTimer() {
+        // 重置秒数
+        seconds = 0;
+        updateTimerDisplay(seconds);
+
+        // 清除之前的计时器
+        clearInterval(timerInterval);
+
+        // 开始新的计时器
+        timerInterval = setInterval(function() {
+            seconds++;
+            updateTimerDisplay(seconds);
+        }, 1000);
+
+
     }
 
-    // 模拟发送录音请求，并使用本地 MP3 文件
-    function startRecording() {
-        $.ajax({
-            url: '../media/test.mp3',
-            method: 'GET',
-            responseType: 'arraybuffer',
-            success: function (data, textStatus, xhr) {
-                decodeAudio(data);
-            },
-            error: function (xhr, textStatus, error) {
-                console.error('加载 MP3 文件失败', error);
-            }
-        });
+    function stopTimer() {
+        clearInterval(timerInterval);
+
     }
 
-    // 解码音频流
-    function decodeAudio(arrayBuffer) {
-        audioContext.decodeAudioData(arrayBuffer, function (audioBuffer) {
-            processAudioBuffer(audioBuffer);
-        }, function (e) {
-            console.error('解码音频失败', e);
-        });
+    function updateTimerDisplay(seconds) {
+        let minutes = Math.floor(seconds / 60);
+        let remainingSeconds = seconds % 60;
+        let formattedTime =
+            (minutes < 10 ? '0' : '') + minutes + ':' +
+            (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
+        $('#record-time-text').text(formattedTime);
     }
 
-    // 处理音频缓冲区，计算左右声道的能量值
-    function processAudioBuffer(audioBuffer) {
-        var channelDataLeft = audioBuffer.getChannelData(0); // 左声道
-        var channelDataRight = audioBuffer.getChannelData(1); // 右声道
+    $('#start').click(function() {
+        $(this).hide();
+        $('#stop').show();
+        $("#record-time").show()
 
-        // 计算左声道和右声道的能量值
-        var energyLeft = calculateEnergy(channelDataLeft);
-        var energyRight = calculateEnergy(channelDataRight);
-
-        // 在页面上显示左右声道的能量值（示例）
-        displayEnergy(energyLeft, energyRight);
-    }
-
-    // 计算声道的能量值
-    function calculateEnergy(channelData) {
-        var sumOfSquares = 0;
-        for (var i = 0; i < channelData.length; i++) {
-            sumOfSquares += channelData[i] * channelData[i];
-        }
-        var rms = Math.sqrt(sumOfSquares / channelData.length);
-        return rms;
-    }
-
-    // 显示左右声道的能量值（示例）
-    function displayEnergy(energyLeft, energyRight) {
-        console.log('左声道能量值:', energyLeft);
-        console.log('右声道能量值:', energyRight);
-
-        // 在页面上显示示例
-        // 这里可以根据实际需要将能量值显示在页面的某个元素中
-    }
-
-    // 点击开始按钮开始模拟录音
-    $('#start').click(function () {
-        startAudioContext();
         startRecording();
     });
 
-    // 点击停止按钮停止录音（如果有需要的话）
-    $('#stop').click(function () {
-        // 停止录音的相关逻辑（如果有需要的话）
-    });
+    $('#stop').click(function() {
+        $(this).hide();
+        $('#start').show();
+        $("#record-time").hide()
 
+        stopTimer();
+    });
+    let controller;
+    let audioContext;
+    let sourceNode;
+    async function startRecording() {
+        console.log('开始录音')
+        document.getElementById('startRecording').disabled = true;
+        document.getElementById('stopRecording').disabled = false;
+
+        controller = new AbortController();
+        const signal = controller.signal;
+
+        audioContext = new (window.AudioContext || window.webkitAudioContext)();
+        const audioStream = new MediaStream();
+        const audioPlayer = document.getElementById('audioPlayer');
+        const mediaStreamDestination = audioContext.createMediaStreamDestination();
+
+        fetch('http://192.168.2.1/record/stream', { signal })
+            .then(response => {
+                const reader = response.body.getReader();
+                startTimer();//开始计时
+                function read() {
+                    reader.read().then(({ done, value }) => {
+                        if (done) {
+                            console.log('录音成功 completed');
+
+                            return;
+                        }
+
+                        const audioBuffer = audioContext.decodeAudioData(value.buffer)
+                            .then(buffer => {
+                                if (!sourceNode) {
+                                    sourceNode = audioContext.createBufferSource();
+                                    sourceNode.buffer = buffer;
+                                    sourceNode.connect(mediaStreamDestination);
+                                    audioPlayer.srcObject = mediaStreamDestination.stream;
+                                    audioPlayer.play();
+                                } else {
+                                    sourceNode.buffer = buffer;
+                                }
+                            })
+                            .catch(error => {
+                                console.error('Error decoding audio data:', error);
+                            });
+
+                        read();
+                    });
+                }
+
+                read();
+            })
+            .catch(error => {
+                if (error.name === 'AbortError') {
+                    console.log('Fetch aborted');
+                } else {
+                    console.error('Fetch error:', error);
+                }
+            });
+    }
+
+    function stopRecording() {
+        document.getElementById('startRecording').disabled = false;
+        document.getElementById('stopRecording').disabled = true;
+        controller.abort();
+        audioContext.close();
+        sourceNode = null;
+    }
 });
