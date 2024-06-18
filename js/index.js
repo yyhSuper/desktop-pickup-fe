@@ -410,7 +410,7 @@ $('#customer_vertical div').on('click', function () {
         //判断服务器域名、IP、端口如果非空时是否符合正则
 
         if (validateServerDetails(updatedConfig_.advanced.server.domain, updatedConfig_.advanced.server.ip, updatedConfig_.advanced.server.port)) {
-           
+
             submitForm()
         } else {
             alert("请检查服务器域名、IP、端口是否正确")
@@ -445,7 +445,7 @@ $('#customer_vertical div').on('click', function () {
         }else{
             defaultSsid=null
         }
-     
+
         var updatedConfig = {
             basic: {
                 wifi: {
@@ -501,7 +501,7 @@ $('#customer_vertical div').on('click', function () {
                         },
                         error: function (err) {
                             console.error("重启失败", err);
-                           
+
                         }
                     });
                 } else {
@@ -548,124 +548,230 @@ $('#customer_vertical div').on('click', function () {
         });
     }
 
-    
-
-
-
-    //计算时间函数，点击按钮之后就开始计时，停止之后清理定时器
     let timerInterval;
     let seconds = 0;
+    let audioPlayer;
+    const canvas1 = document.getElementById('audio-visualizer-1');
+    const canvas2 = document.getElementById('audio-visualizer-2');
+    const canvasCtx1 = canvas1.getContext('2d');
+    const canvasCtx2 = canvas2.getContext('2d');
+    let audioContext;
+    let analyserLeft, analyserRight;
+    let bufferLength;
+    let dataArrayLeft, dataArrayRight;
+    let sourceNode;
+    let audioContextInitialized = false;
 
-    function startTimer() {
-        // 重置秒数
-        seconds = 0;
-        updateTimerDisplay(seconds);
-
-        // 清除之前的计时器
-        clearInterval(timerInterval);
-
-        // 开始新的计时器
-        timerInterval = setInterval(function() {
-            seconds++;
-            updateTimerDisplay(seconds);
-        }, 1000);
-
-
-    }
-
-    function stopTimer() {
-        clearInterval(timerInterval);
-
-    }
-
-    function updateTimerDisplay(seconds) {
-        let minutes = Math.floor(seconds / 60);
-        let remainingSeconds = seconds % 60;
-        let formattedTime =
-            (minutes < 10 ? '0' : '') + minutes + ':' +
-            (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
-        $('#record-time-text').text(formattedTime);
-    }
+    initAudioContext();
 
     $('#start').click(function() {
         $(this).hide();
         $('#stop').show();
-        $("#record-time").show()
-
-        startRecording();
+        $('#record-time').show();
+        if (audioContextInitialized) {
+            startRecording();
+        } else {
+            console.error('audioContext 尚未初始化，请稍后再试。');
+        }
     });
 
     $('#stop').click(function() {
         $(this).hide();
         $('#start').show();
-        $("#record-time").hide()
-
-        stopTimer();
+        $('#record-time').hide();
+        stopRecording();
     });
-    let controller;
-    let audioContext;
-    let sourceNode;
-    async function startRecording() {
-        console.log('开始录音')
-        document.getElementById('startRecording').disabled = true;
-        document.getElementById('stopRecording').disabled = false;
 
-        controller = new AbortController();
-        const signal = controller.signal;
+    function initAudioContext() {
+        try {
+            audioContext = new (window.AudioContext || window.webkitAudioContext)();
+            audioContextInitialized = true;
+            console.log('AudioContext 初始化成功');
+        } catch (e) {
+            console.error('无法创建 AudioContext:', e);
+        }
+    }
 
-        audioContext = new (window.AudioContext || window.webkitAudioContext)();
-        const audioStream = new MediaStream();
-        const audioPlayer = document.getElementById('audioPlayer');
-        const mediaStreamDestination = audioContext.createMediaStreamDestination();
+    function startTimer() {
+        seconds = 0;
+        updateTimerDisplay(seconds);
+        clearInterval(timerInterval);
+        timerInterval = setInterval(function() {
+            seconds++;
+            updateTimerDisplay(seconds);
+        }, 1000);
+        console.log('计时器开始');
+    }
 
-        fetch('http://192.168.2.1/record/stream', { signal })
+    function stopTimer() {
+        clearInterval(timerInterval);
+        console.log('计时器停止');
+    }
+
+    function updateTimerDisplay(seconds) {
+        let minutes = Math.floor(seconds / 60);
+        let remainingSeconds = seconds % 60;
+        let formattedTime = (minutes < 10 ? '0' : '') + minutes + ':' + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
+        $('#record-time-text').text(formattedTime);
+    }
+
+    function startRecording() {
+        $('#error').text('');
+        stopRecording(); // 停止上次录音并清理资源
+
+        // 创建新的 HTMLMediaElement 对象
+        audioPlayer = document.createElement('audio');
+        audioPlayer.id = 'player';
+        document.body.appendChild(audioPlayer);
+
+        console.log('开始获取音频流...');
+        fetch('http://192.168.2.1/record/stream')
             .then(response => {
-                const reader = response.body.getReader();
-                startTimer();//开始计时
-                function read() {
-                    reader.read().then(({ done, value }) => {
-                        if (done) {
-                            console.log('录音成功 completed');
-
-                            return;
-                        }
-
-                        const audioBuffer = audioContext.decodeAudioData(value.buffer)
-                            .then(buffer => {
-                                if (!sourceNode) {
-                                    sourceNode = audioContext.createBufferSource();
-                                    sourceNode.buffer = buffer;
-                                    sourceNode.connect(mediaStreamDestination);
-                                    audioPlayer.srcObject = mediaStreamDestination.stream;
-                                    audioPlayer.play();
-                                } else {
-                                    sourceNode.buffer = buffer;
-                                }
-                            })
-                            .catch(error => {
-                                console.error('Error decoding audio data:', error);
-                            });
-
-                        read();
-                    });
+                if (response.ok) {
+                    return response.arrayBuffer();
+                } else {
+                    throw new Error(`错误: ${response.status} ${response.statusText}`);
                 }
-
-                read();
+            })
+            .then(arrayBuffer => {
+                console.log('音频流获取成功，开始解码...');
+                return audioContext.decodeAudioData(arrayBuffer);
+            })
+            .then(decodedData => {
+                console.log('音频流解码成功');
+                playDecodedAudio(decodedData);
             })
             .catch(error => {
-                if (error.name === 'AbortError') {
-                    console.log('Fetch aborted');
-                } else {
-                    console.error('Fetch error:', error);
-                }
+                console.error('获取音频流错误:', error);
+                $('#error').text(error.message);
+                stopRecording();
             });
+
+        analyserLeft = audioContext.createAnalyser();
+        analyserRight = audioContext.createAnalyser();
+        analyserLeft.fftSize = 2048;
+        analyserRight.fftSize = 2048;
+        bufferLength = analyserLeft.frequencyBinCount;
+        dataArrayLeft = new Uint8Array(bufferLength);
+        dataArrayRight = new Uint8Array(bufferLength);
+
+        startTimer();
+        draw();
+    }
+
+    function playDecodedAudio(decodedData) {
+        const splitter = audioContext.createChannelSplitter(2);
+        const merger = audioContext.createChannelMerger(2);
+
+        sourceNode = audioContext.createBufferSource();
+        sourceNode.buffer = decodedData;
+
+        sourceNode.connect(splitter);
+        splitter.connect(analyserLeft, 0);
+        splitter.connect(analyserRight, 1);
+
+        analyserLeft.connect(audioContext.destination);
+        analyserRight.connect(audioContext.destination);
+
+        sourceNode.start(0);
+
+        audioPlayer.play().then(() => {
+            console.log('音频播放已开始');
+        }).catch(error => {
+            console.error('音频播放错误:', error);
+        });
     }
 
     function stopRecording() {
-        document.getElementById('startRecording').disabled = false;
-        document.getElementById('stopRecording').disabled = true;
-        controller.abort();
-        audioContext.close();
-        sourceNode = null;
+        if (audioPlayer) {
+            audioPlayer.pause(); // 先暂停播放
+            audioPlayer.currentTime = 0; // 重置播放时间
+            if (audioPlayer.src) {
+                URL.revokeObjectURL(audioPlayer.src);
+                audioPlayer.src = ''; // 停止音频播放并释放资源
+            }
+            if (audioPlayer.parentNode) {
+                audioPlayer.parentNode.removeChild(audioPlayer);
+            }
+            audioPlayer = null;
+        }
+        stopTimer();
+        cleanupAudioNodes();
     }
+
+    function cleanupAudioNodes() {
+        if (sourceNode) {
+            sourceNode.disconnect();
+            console.log('SourceNode 断开连接');
+            sourceNode = null;
+        }
+        if (analyserLeft) {
+            analyserLeft.disconnect();
+            console.log('AnalyserLeft 断开连接');
+            analyserLeft = null;
+        }
+        if (analyserRight) {
+            analyserRight.disconnect();
+            console.log('AnalyserRight 断开连接');
+            analyserRight = null;
+        }
+    }
+
+    function draw() {
+        if (!analyserLeft || !analyserRight) return;
+
+        requestAnimationFrame(draw);
+
+        analyserLeft.getByteTimeDomainData(dataArrayLeft);
+        analyserRight.getByteTimeDomainData(dataArrayRight);
+
+        canvasCtx1.fillStyle = 'rgb(240, 240, 240)';
+        canvasCtx1.fillRect(0, 0, canvas1.width, canvas1.height);
+
+        canvasCtx2.fillStyle = 'rgb(240, 240, 240)';
+        canvasCtx2.fillRect(0, 0, canvas2.width, canvas2.height);
+
+        canvasCtx1.lineWidth = 2;
+        canvasCtx1.strokeStyle = '#32CD32'; // 绿色
+        canvasCtx2.lineWidth = 2;
+        canvasCtx2.strokeStyle = '#4169E1'; // 蓝色
+
+        canvasCtx1.beginPath();
+        canvasCtx2.beginPath();
+
+        const sliceWidth1 = canvas1.width * 1.0 / bufferLength;
+        const sliceWidth2 = canvas2.width * 1.0 / bufferLength;
+        let x1 = 0;
+        let x2 = 0;
+
+        for (let i = 0; i < bufferLength; i++) {
+            const vLeft = dataArrayLeft[i] / 128.0; // 转换为范围在 [0, 1] 的值
+            const yLeft = vLeft * canvas1.height / 2;
+
+            const vRight = dataArrayRight[i] / 128.0;
+            const yRight = vRight * canvas2.height / 2;
+
+            if (i === 0) {
+                canvasCtx1.moveTo(x1, yLeft);
+                canvasCtx2.moveTo(x2, yRight);
+            } else {
+                canvasCtx1.lineTo(x1, yLeft);
+                canvasCtx2.lineTo(x2, yRight);
+            }
+
+            x1 += sliceWidth1;
+            x2 += sliceWidth2;
+        }
+
+        canvasCtx1.lineTo(canvas1.width, canvas1.height / 2);
+        canvasCtx1.stroke();
+
+        canvasCtx2.lineTo(canvas2.width, canvas2.height / 2);
+        canvasCtx2.stroke();
+    }
+
+
+
+
+
 });
