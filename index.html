@@ -14,11 +14,24 @@
 </head>
 
 <body>
-    <header>
-        <img src="img/logo.png" alt="">
-        <h1>桌面拾音器V1.29</h1>
+   
+    <header class="main-width">
+        <div class="left-wrap">
+            <img src="img/logo.png" alt="" class="logo">
+            <img src="img/x.png" alt="" class="x">
+            <h1>桌面拾音器</h1>
+        </div>
+        <div class="right-wrap">
+            <div id="restart">
+                <img src="img/reStart.png" alt="" class="restart">
+                <span>设备重启</span>
+            </div>
+           
+
+        </div>
+
     </header>
-    <div class="container">
+    <div class="container main-width">
         <div class="box-row">
             <div class="title">
                 <div class="title-header">
@@ -130,20 +143,20 @@
                     <div id="now-wifi" class="noData">
                         <span>暂无可连接wifi</span>
                     </div>
-                   <!-- <div class="input-row">
+                    <div class="input-row">
                         <span class="wifi-name">WIFIETC-01WIFIETC-01WIFIETC-01WIFIETC-01</span>
                         <div class="status">
-                            &lt;!&ndash;                        当前点击选中&ndash;&gt;
+<!--                                              当前点击选中-->
                             <img src="img/selected.png" alt="">
                         </div>
                     </div>
                     <div class="input-row">
                         <span class="wifi-name">WIFIETC-01</span>
                         <div class="status">
-                            &lt;!&ndash;                        如果已经连接，则显示已连接&ndash;&gt;
+<!--                                                    如果已经连接，则显示已连接-->
                             <div class="checked"><span>已连接</span></div>
                         </div>
-                    </div>-->
+                    </div>
                 </div>
                 <h2 class="title-label">WiFi密码：</h2>
                 <div class="input-box">
@@ -347,6 +360,7 @@
 </body>
 <script src="js/jquery.js"></script>
 <script src="js/index.js"></script>
+<script src="js/video.js"></script>
 <script src="js/jquery.binarytransport.js"></script>
 
 </html>

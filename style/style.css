@@ -15,8 +15,8 @@ body {
 header {
 
     color: #fff;
-    height:90px;
-    line-height:90px;
+    height:50px;
+    line-height:50px;
     display:flex;
     flex-direction:row;
     justify-content:space-between;
@@ -24,12 +24,18 @@ header {
     padding:0 16px;
 
 }
-
-header h1 {
+header  .left-wrap{
+    flex: 1;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+}
+header .left-wrap h1 {
 
 
     font-weight: bold;
-    font-size: 19px;
+    font-size: 18px;
     color: #000000;
     line-height: 22px;
     text-align: center;
@@ -37,14 +43,48 @@ header h1 {
     text-transform: none;
 
 }
-header img {
+header .left-wrap img.logo {
     margin: 0;
     height:24px;
+   
     width:auto
 }
+header .left-wrap img.x {
+   
+    height:9px;
+    margin: 0 10px;
+    width:auto
+}
+header  .right-wrap{
+    display: flex;
+}
+header  .right-wrap #restart{
+    cursor: pointer;
+    display: flex;
+
+    justify-content: center;
+    align-items: center;
+}
+header  .right-wrap img.restart{
+    width: 16px;
+    display: inline-block;
+    
+}
+header  .right-wrap span{
+    font-weight: 500;
+    font-size: 12px;
+    margin-left: 4px;
+    color: #6A6A6A;
+    line-height: 16px;
+    text-align: center;
+    font-style: normal;
+    text-transform: none;
+}
+
+
 
 .container {padding:0 16px 30px 16px;}
-.container .box-row {background:#fff;height: auto;border-radius: 8px 8px 8px 8px;padding:24px 16px ;margin-top:13px;}
+.container .box-row {background:#fff;height: auto;border-radius: 8px 8px 8px 8px;padding:24px 16px ;margin-bottom:13px;}
 .container .main-content{display:none;}
 .container .box-row  .title{display:flex;flex-direction:row;justify-content: space-between;align-items: center;
 cursor: pointer
@@ -61,7 +101,7 @@ cursor: pointer
 .container .box-row  .title .title-right .arr{width:24px;height:24px;background: url('../img/arr-right.png') no-repeat;background-size: 100%;}
 .container .box-row  .title.active .arr{background: url('../img/arr.png') no-repeat;background-size:100% ;}
 .audio-box{display:flex;flex-direction:column;}
-.audio-box .audio-row{display:flex;flex-direction:row;margin-top:20px;justify-content: center;align-items: center;}
+.audio-box .audio-row{display:flex;flex-direction:row;margin-bottom:20px;justify-content: center;align-items: center;}
 .audio-box .audio-row span{
     font-weight: 500;
     font-size: 12px;
@@ -72,7 +112,7 @@ cursor: pointer
     text-transform: none;
     white-space: nowrap;
 }
-.audio-box .audio-row .audio-main{flex:1;height:60px;}
+.audio-box .audio-row .audio-main{flex:1;height:100px;}
 .audio-box .audio-row .audio-main canvas{width:100%;height:100%;background:#eee;}
 .audio-player{
     display: flex;
@@ -168,7 +208,7 @@ cursor: pointer
     font-style: normal;
     text-transform: none;
 }
-.button_submitReset{display:flex;flex-direction:row;justify-content: space-between;margin-top:16px;align-items: center;}
+.button_submitReset{display:flex;flex-direction:row;justify-content: space-between;margin-top:16px;align-items: center;margin-bottom: 13px;}
 .button_submitReset .button-wrap{
     display:flex;
     margin:0;

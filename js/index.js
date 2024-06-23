@@ -50,58 +50,131 @@ $(document).ready(function () {
         }
     });
 
+
     // 使用测试配置
 
-    var testJSON = {
-        "basic": {//基础配置
-            "wifi": {//WIFI配置
-                "ssids": [//WIFI热点列表
+    var testJSON ={
+        "basic": {
+            "wifi": {
+                "ip": "192.168.0.124",
+                "mac": "50:41:1C:39:CD:AE",
+                "enabled": true,
+                "ssids": [
                     {
-                        "ssid": "TP-LINK",//WIFI热点名称
-                        "signal_level": "high/middle/low",//WIFI信号强度等级
-                        "signal_dbm": -37,//WIFI信号强度值
-                        "status": true//WIFI连接状态
+                        "ssid": "VIP888",
+                        "signal_level": "high",
+                        "signal_dbm": -32,
+                        "status": false
                     },
                     {
-                        "ssid": "TP-LINK_2",//WIFI热点名称
-                        "signal_level": "high/middle/low",//WIFI信号强度等级
-                        "signal_dbm": -60,//WIFI信号强度值
-                        "status": false//WIFI连接状态
+                        "ssid": "huixia2.4G",
+                        "signal_level": "high",
+                        "signal_dbm": -31,
+                        "status": true
                     },
                     {
-                        "ssid": "TP-LINK_3",//WIFI热点名称
-                        "signal_level": "high/middle/low",//WIFI信号强度等级
-                        "signal_dbm": -60,//WIFI信号强度值
-                        "status": false//WIFI连接状态
+                        "ssid": "huixia2.4G",
+                        "signal_level": "high",
+                        "signal_dbm": -36,
+                        "status": true
+                    },
+                    {
+                        "ssid": "ChinaNet-2NZk",
+                        "signal_level": "middle",
+                        "signal_dbm": -40,
+                        "status": true
+                    },
+                    {
+                        "ssid": "87003",
+                        "signal_level": "middle",
+                        "signal_dbm": -58,
+                        "status": true
+                    },
+                    {
+                        "ssid": "pj&zh",
+                        "signal_level": "low",
+                        "signal_dbm": -63,
+                        "status": true
+                    },
+                    {
+                        "ssid": "ChinaNet-Tpki",
+                        "signal_level": "low",
+                        "signal_dbm": -65,
+                        "status": true
+                    },
+                    {
+                        "ssid": "ChinaNet-Tpki",
+                        "signal_level": "low",
+                        "signal_dbm": -66,
+                        "status": true
+                    },
+                    {
+                        "ssid": "86002",
+                        "signal_level": "low",
+                        "signal_dbm": -68,
+                        "status": true
+                    },
+                    {
+                        "ssid": "ChinaNet-3591",
+                        "signal_level": "low",
+                        "signal_dbm": -70,
+                        "status": true
+                    },
+                    {
+                        "ssid": "87001",
+                        "signal_level": "low",
+                        "signal_dbm": -72,
+                        "status": true
+                    },
+                    {
+                        "ssid": "87005",
+                        "signal_level": "low",
+                        "signal_dbm": -73,
+                        "status": true
+                    },
+                    {
+                        "ssid": "86001",
+                        "signal_level": "low",
+                        "signal_dbm": -78,
+                        "status": true
+                    },
+                    {
+                        "ssid": "86003",
+                        "signal_level": "low",
+                        "signal_dbm": -78,
+                        "status": true
+                    },
+                    {
+                        "ssid": "HJGY-6",
+                        "signal_level": "low",
+                        "signal_dbm": -80,
+                        "status": true
                     }
-                ],
-                "ip": "192.168.20.100",//已经连接的WIFI的IP地址
-                "mac": "00:1A:2B:3C:4D:5E",//WIFI的MAC地址
-                "enabled": true
+                ]
             }
         },
-        "advanced": {//高级配置
-            "mic": {//麦克风配置
-                "staff_horizon": 45,//职员方向水平拾音角度
-                "staff_vertical": 120,//职员方向竖直拾音角度
-                "customer_horizontal": 45,//客户方向水平拾音角度
-                "customer_vertical": 45//客户方向竖直拾音角度
+        "advanced": {
+            "mic": {
+                "staff_horizon": 30,
+                "staff_vertical": 30,
+                "customer_horizontal": 30,
+                "customer_vertical": 30
             },
-            "distance_gauge": {//感应距离配置
-                "max": 200,//人体感应最大距离(厘米)
-                "min": 1,//人体感应最小距离(厘米)
-                "time": 10,//人体感应时间(秒)
-                "enabled": true,//人体感应开关
-                "set": 80//感应距离设置(厘米)
+            "distance_gauge": {
+                "max": 200,
+                "min": 1,
+                "time": 2,
+                "enabled": true,
+                "set": 150
             },
-            "server": {//服务器配置
-                "domain": "",//网络管理平台域名
-                "ip": "",//网络管理平台IP
-                "port": 8080//网络管理平台端口
+            "server": {
+                "domain": "36.139.39.189",
+                "ip": "36.139.39.189",
+                "port": 0
             },
-            "wired": {//有线网络配置
-                "mac": "",//有线网络MAC地址
-                "ip": ""//有线网络IP地址
+            "wired": {
+                "ip": "0.0.0.0",
+                "mac": "0A:0C:11:22:33:44"
             }
         }
     }
@@ -122,18 +195,19 @@ $(document).ready(function () {
         }
     });
     // initialConfig=testJSON
-
+    // console.log("初始化配置",initialConfig)
+    // initializeForm(initialConfig);
 
 
     // 初始化表单
     function initializeForm(config) {
-        console.log("初始化配置",config)
+        console.log("初始化配置2",config)
         // 初始化WiFi列表
         var wifiListContainer = $('#wifi-list');
         wifiListContainer.empty(); // 清空WiFi列表容器
 
         $.each(config.basic.wifi.ssids, function (index, wifi) {
-            var statusIcon = wifi.status ? '<div class="checked"><span>已连接</span></div>' : '';
+            var statusIcon = wifi.status===true ? '<div class="checked"><span>已连接</span></div>' : '';
             var wifiRow = '<div class="input-row">' +
                 '<span class="wifi-name">' + wifi.ssid + '</span>' +
                 '<div class="status">' + statusIcon + '</div>' +
@@ -232,33 +306,36 @@ $(document).ready(function () {
     });
 //download_Mp3
 $("#download_Mp3").click(function (event) {
-    console.log("开始下载")
+    console.log("开始下载window.location.href")
+    window.location.href='http://192.168.2.1/record/download'
 
-    $.ajax({
-        url: 'http://192.168.2.1/record/download',
-        type: 'GET',
-        dataType: 'binary',
-        xhrFields: {
-            responseType: 'blob'
-        },
-        processData: false,
-        success: function(data, status, xhr) {
-            var blob = new Blob([data], { type: 'audio/mpeg' });
-            var url = window.URL.createObjectURL(blob);
-            var a = document.createElement('a');
-            a.style.display = 'none';
-            a.href = url;
-            var filename = xhr.getResponseHeader('Content-Disposition').split('filename=')[1].trim();
-            a.download = filename ? filename : 'recording.mp3';
-            document.body.appendChild(a);
-            a.click();
-            window.URL.revokeObjectURL(url);
-        },
-        error: function(xhr, status, error) {
-            console.error('下载失败:', error);
+
+});
+    //点击重启
+    $('#restart').click(function () {
+        var restart = confirm("确定重启设备吗？");
+        if (restart) {
+        
+            $.ajax({
+                url: base_url + "/restart",
+                type: "POST",
+                contentType: "application/json",
+                success: function (response) {
+                    if (response.result === 0) {
+                        console.log("重启成功");
+                        alert('重启成功')
+                    } else {
+                        alert('重启失败')
+                        console.log("重启失败");
+                    }
+                },
+                error: function (err) {
+                    console.error("重启失败", err);
+                    alert('重启失败',err)
+                }
+            });
         }
     });
-});
     //密码输入框事件
     $("#wifi_password").on('input', function (e) {
         updatedConfig_.basic.wifi.password = e.delegateTarget.value;
@@ -288,15 +365,15 @@ $("#download_Mp3").click(function (event) {
     });
     //distance_gauge_time 感应时间
     $("#distance_gauge_time").on('input', function (e) {
-       if(e.delegateTarget.value>60||e.delegateTarget.value<1){
-           if(e.delegateTarget.value!=""){
-               $("#distance_gauge_time_error").show()
+    if(e.delegateTarget.value>60||e.delegateTarget.value<1){
+        if(e.delegateTarget.value!=""){
+            $("#distance_gauge_time_error").show()
                // e.delegateTarget.value = "";
-           }
+ }
 
-       }else{
-           $("#distance_gauge_time_error").hide()
-           updatedConfig_.advanced.distance_gauge.time = e.delegateTarget.value;
+    }else{
+        $("#distance_gauge_time_error").hide()
+        updatedConfig_.advanced.distance_gauge.time = e.delegateTarget.value;
        }
     });
     var domainReg = /^(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,})|\[(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|\[(?:[0-9a-fA-F]{1,4}:){1,7}:|[0-9a-fA-F]{1,4}:(:[0-9a-fA-F]{1,4}){1,6}])$/;
@@ -445,11 +522,12 @@ $('#customer_vertical div').on('click', function () {
         }else{
             defaultSsid=null
         }
+        console.log(defaultSsid,updatedConfig_.basic.wifi.ssid)
 
         var updatedConfig = {
             basic: {
                 wifi: {
-                    ssid: updatedConfig_.basic.wifi.ssid ||defaultSsid!=undefined&&defaultSsid!=null?defaultSsid:"",
+                    ssid: updatedConfig_.basic.wifi.ssid==null?defaultSsid!=undefined&&defaultSsid!=null?defaultSsid:"":updatedConfig_.basic.wifi.ssid,
                     password: updatedConfig_.basic.wifi.password || $('#wifi_password').val(),
                     enabled: $('#wifi_enabled').is(':checked')
                 }
@@ -548,7 +626,7 @@ $('#customer_vertical div').on('click', function () {
         });
     }
 
-    let timerInterval;
+    /*let timerInterval;
     let seconds = 0;
     let audioPlayer;
     const canvas1 = document.getElementById('audio-visualizer-1');
@@ -769,7 +847,7 @@ $('#customer_vertical div').on('click', function () {
         canvasCtx2.lineTo(canvas2.width, canvas2.height / 2);
         canvasCtx2.stroke();
     }
-
+*/
 
 
 
