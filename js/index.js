@@ -565,23 +565,6 @@ $('#customer_vertical div').on('click', function () {
             success: function (response) {
                 if (response.result === 0) {
                     alert("配置提交成功");
-                    $.ajax({
-                        url: base_url + "/restart",
-                        type: "POST",
-                        contentType: "application/json",
-                        data: JSON.stringify(updatedConfig),
-                        success: function (response) {
-                            if (response.result === 0) {
-                                console.log("重启成功");
-                            } else {
-                                console.log("重启失败");
-                            }
-                        },
-                        error: function (err) {
-                            console.error("重启失败", err);
-
-                        }
-                    });
                 } else {
                     alert("配置提交失败");
                 }
