@@ -1,0 +1,151 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>实时音频流双通道波形可视化</title>
+  <style>
+    canvas {
+      display: block;
+      width: 100%;
+      height: 80px;
+      border: 1px solid black;
+      margin: 10px 0;
+    }
+  </style>
+</head>
+
+<body>
+  <h1>实时音频流双通道波形可视化</h1>
+  <canvas id="leftChannel"></canvas>
+  <canvas id="rightChannel"></canvas>
+  <button onclick="startVisualization()">开始可视化</button>
+
+  <script>
+    let audioContext;
+    let analyserLeft, analyserRight;
+    let bufferLength;
+    let dataArrayLeft, dataArrayRight;
+    let canvasLeft, canvasRight;
+    let canvasContextLeft, canvasContextRight;
+    let drawInterval;
+
+    var audioStack = [];
+    var nextTime = 0;
+
+    async function startVisualization() {
+      // 创建音频上下文
+      audioContext = new (window.AudioContext || window.webkitAudioContext)();
+
+      // 创建两个分析器节点
+      analyserLeft = audioContext.createAnalyser();
+      analyserRight = audioContext.createAnalyser();
+      analyserLeft.fftSize = 512;
+      analyserRight.fftSize = 512;
+      bufferLength = analyserLeft.fftSize;
+      dataArrayLeft = new Uint8Array(bufferLength);
+      dataArrayRight = new Uint8Array(bufferLength);
+
+      // 获取canvas元素和上下文
+      canvasLeft = document.getElementById('leftChannel');
+      canvasRight = document.getElementById('rightChannel');
+      canvasContextLeft = canvasLeft.getContext('2d');
+      canvasContextRight = canvasRight.getContext('2d');
+
+      // 获取远程音频流
+      await fetchAudioStream('http://192.168.2.1/record/stream');
+    }
+
+    async function fetchAudioStream(url) {
+      const response = await fetch(url);
+      const audioStream = response.body.getReader();
+      processAudioStream(audioStream);
+    }
+
+    async function processAudioStream(reader) {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        const audioBuffer = await audioContext.decodeAudioData(value.buffer);
+        audioStack.push(audioBuffer);
+        if (audioStack.length) {
+          // 开始绘制
+          drawInterval = setInterval(draw, 2000);  // 每50ms绘制一次，调整间隔时间以控制速度
+          scheduleBuffers();
+        }
+      }
+    }
+
+
+    function scheduleBuffers() {
+      while (audioStack.length) {
+        var buffer = audioStack.shift();
+        var source = audioContext.createBufferSource();
+        source.buffer = buffer;
+        source.connect(audioContext.destination);
+        if (nextTime == 0)
+          nextTime = audioContext.currentTime;  /// add 50ms latency to work well across systems - tune this if you like
+        source.start(nextTime);
+        nextTime += source.buffer.duration; // Make the next buffer wait the length of the last buffer before being played
+        // 创建ChannelSplitterNode以分离左右声道
+        const splitter = audioContext.createChannelSplitter(2);
+        source.connect(splitter);
+        splitter.connect(analyserLeft, 0);
+        splitter.connect(analyserRight, 1);
+      };
+    }
+
+    function draw() {
+
+      //requestAnimationFrame(draw);
+
+      analyserLeft.getByteTimeDomainData(dataArrayLeft);
+      analyserRight.getByteTimeDomainData(dataArrayRight);
+
+      // 滚动波形效果：将现有的图像向左移动
+      const sliceWidth = 1;
+      const imageLeft = canvasContextLeft.getImageData(sliceWidth, 0, canvasLeft.width - sliceWidth, canvasLeft.height);
+      const imageRight = canvasContextRight.getImageData(sliceWidth, 0, canvasRight.width - sliceWidth, canvasRight.height);
+
+      canvasContextLeft.putImageData(imageLeft, 0, 0);
+      canvasContextRight.putImageData(imageRight, 0, 0);
+
+      canvasContextLeft.clearRect(canvasLeft.width - sliceWidth, 0, sliceWidth, canvasLeft.height);
+      canvasContextRight.clearRect(canvasRight.width - sliceWidth, 0, sliceWidth, canvasRight.height);
+
+      canvasContextLeft.lineWidth = 0.5;
+      canvasContextLeft.strokeStyle = 'rgb(255, 0, 0)'; // 左声道红色
+      canvasContextRight.lineWidth = 0.5;
+      canvasContextRight.strokeStyle = 'rgb(0, 0, 255)'; // 右声道蓝色
+
+      canvasContextLeft.beginPath();
+      canvasContextRight.beginPath();
+
+      let x = canvasLeft.width - sliceWidth;
+
+      for (let i = 0; i < bufferLength; i++) {
+        const vLeft = dataArrayLeft[i] / 128.0;
+        const yLeft = vLeft * canvasLeft.height / 2;
+        const vRight = dataArrayRight[i] / 128.0;
+        const yRight = vRight * canvasRight.height / 2;
+
+        if (i === 0) {
+          canvasContextLeft.moveTo(x, yLeft);
+          canvasContextRight.moveTo(x, yRight);
+        } else {
+          canvasContextLeft.lineTo(x + (i * sliceWidth / bufferLength), yLeft);
+          canvasContextRight.lineTo(x + (i * sliceWidth / bufferLength), yRight);
+
+        }
+      }
+
+      canvasContextLeft.stroke();
+      canvasContextRight.stroke();
+    }
+
+
+  </script>
+</body>
+
+</html>
