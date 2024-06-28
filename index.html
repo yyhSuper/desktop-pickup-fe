@@ -4,357 +4,358 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport"
-        content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <!--    <script src="https://cdn.bootcdn.net/ajax/libs/jquery/3.6.0/jquery.min.js"></script>-->
-   
+
     <link rel="stylesheet" href="style/style.css">
 
     <title>中国移动桌面拾音器配置</title>
 </head>
 
 <body>
-   
-    <header class="main-width">
-        <div class="left-wrap">
-            <img src="img/logo.png" alt="" class="logo">
-            <img src="img/x.png" alt="" class="x">
-            <h1>桌面拾音器</h1>
+
+<header class="main-width">
+    <div class="left-wrap">
+        <img src="img/logo.png" alt="" class="logo">
+        <img src="img/x.png" alt="" class="x">
+        <h1>桌面拾音器</h1>
+    </div>
+    <div class="right-wrap">
+        <div id="restart">
+            <img src="img/reStart.png" alt="" class="restart">
+            <span>设备重启</span>
         </div>
-        <div class="right-wrap">
-            <div id="restart">
-                <img src="img/reStart.png" alt="" class="restart">
-                <span>设备重启</span>
+
+
+    </div>
+
+</header>
+<div class="container main-width">
+    <div class="box-row">
+        <div class="title">
+            <div class="title-header">
+                <h3>音频试听</h3>
+                <!--                    试听按钮-->
+                <div id="audition_play">
+                    <div class="audition">
+                        <img src="img/shiting.png" alt="">
+                    </div>
+                </div>
+                <div id="audition_pause">
+                    <div class="audition">
+                        <img src="img/pause.png" alt="">
+                    </div>
+                </div>
+
+                <!--                    点击录制后显示-->
+                <div class="middle" id="record-time">已录制:<span id="record-time-text">00:00</span></div>
             </div>
-           
+            <!-- 录音时间 点击开始录音显示 -->
+
+
+            <div class="title-right"><div class="arr"></div></div>
 
         </div>
-
-    </header>
-    <div class="container main-width">
-        <div class="box-row">
-            <div class="title">
-                <div class="title-header">
-                    <h3>音频试听</h3>
-<!--                    试听按钮-->
-                    <div id="audition_play">
-                        <div class="audition">
-                            <img src="img/shiting.png" alt="">
-                        </div>
-                    </div>
-                    <div id="audition_pause">
-                        <div class="audition">
-                            <img src="img/pause.png" alt="">
-                        </div>
+        <div class="main-content">
+            <div class="audio-box">
+                <div class="audio-row">
+                    <span>声道1：</span>
+                    <!-- 声道波形图 -->
+                    <div class="audio-main">
+                        <canvas id="audio-visualizer-1"></canvas>
                     </div>
 
-<!--                    点击录制后显示-->
-                    <div class="middle" id="record-time">已录制:<span id="record-time-text">00:00</span></div>
                 </div>
-                <!-- 录音时间 点击开始录音显示 -->
-
-
-                <div class="title-right"><div class="arr"></div></div>
-
+                <div class="audio-row">
+                    <span>声道2：</span>
+                    <!-- 声道波形图 -->
+                    <div class="audio-main">
+                        <canvas id="audio-visualizer-2"></canvas>
+                    </div>
+                </div>
+                <div id="error" style="color: red;padding: 25px;text-align: center;"></div>
+                <!-- <div id="button">开始</div> -->
             </div>
-            <div class="main-content">
-                <div class="audio-box">
-                    <div class="audio-row">
-                        <span>声道1：</span>
-                        <!-- 声道波形图 -->
-                        <div class="audio-main">
-                            <canvas id="audio-visualizer-1"></canvas>
-                        </div>
+            <!--  -->
+            <div class="audio-player" id="audio-player">
+                <audio id="player" src="" controls></audio>
+                <!--                     <audio id="player" src="https://app-1317281863.cos.ap-guangzhou.myqcloud.com/html/test.mp3" controls></audio>-->
+            </div>
+            <!-- 下载文件和操作按钮 -->
+            <div class="button-wrap">
+                <!-- 下载mp3文件 -->
+                <div class="button-img" id="download_Mp3">
 
-                    </div>
-                    <div class="audio-row">
-                        <span>声道2：</span>
-                        <!-- 声道波形图 -->
-                        <div class="audio-main">
-                            <canvas id="audio-visualizer-2"></canvas>
-                        </div>
-                    </div>
-                    <div id="error" style="color: red;padding: 25px;text-align: center;"></div>
-                    <!-- <div id="button">开始</div> -->
+                    <img src="img/download.png" alt=""><span>下载</span>
+
                 </div>
-                <!--  -->
-                <div class="audio-player" id="audio-player">
-                     <audio id="player" src="" controls></audio>
-<!--                     <audio id="player" src="https://app-1317281863.cos.ap-guangzhou.myqcloud.com/html/test.mp3" controls></audio>-->
-                </div>
-                <!-- 下载文件和操作按钮 -->
-                <div class="button-wrap">
-                    <!-- 下载mp3文件 -->
-                    <div class="button-img" id="download_Mp3">
+                <!--开始录音  -->
+                <div id="start">
 
-                        <img src="img/download.png" alt=""><span>下载</span>
-
-                    </div>
-                    <!--开始录音  -->
-                    <div id="start">
-
-                            <div class="button-play play" >
-                                <div class="button-bg2">
-                                    <img src="img/play.png" alt="">
-                                </div>
-                            </div>
-
-
-                    </div>
-
-                    <!-- 停止录音 -->
-                    <div id="stop">
-                        <div class="button-play stop" >
-                            <div class="button-bg2">
-                                <img src="img/stop.png" alt="">
-                            </div>
+                    <div class="button-play play" >
+                        <div class="button-bg2">
+                            <img src="img/play.png" alt="">
                         </div>
                     </div>
 
 
+                </div>
 
-
-                    <div class="audio-onlyRead" id="distance_gauge_set_wrap">
-                        感应距离 <span id="distance_gauge_set_text">9cm</span>
+                <!-- 停止录音 -->
+                <div id="stop">
+                    <div class="button-play stop" >
+                        <div class="button-bg2">
+                            <img src="img/stop.png" alt="">
+                        </div>
                     </div>
+                </div>
+
+
+
+
+                <div class="audio-onlyRead" id="distance_gauge_set_wrap">
+                    感应距离 <span id="distance_gauge_set_text">9cm</span>
                 </div>
             </div>
-
         </div>
-        <div class="big_title">
-            <h1>基础配置</h1>
+
+    </div>
+    <div class="big_title">
+        <h1>基础配置</h1>
 
 
-        </div>
-        <div class="button_submitReset">
+    </div>
+    <div class="button_submitReset">
         <div class="button-wrap">
             <button class="reset" id="basic-reset">重置</button>
             <button class="submit" id="basic-submit">提交</button>
         </div>
+    </div>
+    <div class="box-row">
+        <div class="title">
+            <h3 class="title-header">WIFI配置</h3>
+            <div class="title-right"><div class="arr"></div></div>
         </div>
-        <div class="box-row">
-            <div class="title">
-                <h3 class="title-header">WIFI配置</h3>
-                <div class="title-right"><div class="arr"></div></div>
-            </div>
-            <div class="main-content">
-                <h2 class="title-label">WiFI配置</h2>
-                <div class="input-box" id="wifi-list">
-                    <div id="now-wifi" class="noData">
-                        <span>暂无可连接wifi</span>
-                    </div>
-                    <div class="input-row">
-                        <span class="wifi-name">WIFIETC-01WIFIETC-01WIFIETC-01WIFIETC-01</span>
-                        <div class="status">
-<!--                                              当前点击选中-->
-                            <img src="img/selected.png" alt="">
-                        </div>
-                    </div>
-                    <div class="input-row">
-                        <span class="wifi-name">WIFIETC-01</span>
-                        <div class="status">
-<!--                                                    如果已经连接，则显示已连接-->
-                            <div class="checked"><span>已连接</span></div>
-                        </div>
+        <div class="main-content">
+            <h2 class="title-label">WiFI配置</h2>
+            <div class="input-box" id="wifi-list">
+                <div id="now-wifi" class="noData">
+                    <span>暂无可连接wifi</span>
+                </div>
+                <div class="input-row">
+                    <span class="wifi-name">WIFIETC-01WIFIETC-01WIFIETC-01WIFIETC-01</span>
+                    <div class="status">
+                        <!--                                              当前点击选中-->
+                        <img src="img/selected.png" alt="">
                     </div>
                 </div>
-                <h2 class="title-label">WiFi密码：</h2>
-                <div class="input-box">
-                    <div class="input-row">
-                        <input type="password" class="input-text" placeholder="请输入密码" id="wifi_password">
-                        <div class="input-img">
-                            <img src="img/clear.png" alt="" class="clear" id="clear-passwrod">
-                            <img src="img/key.png" alt="" class="key" id="key-pa">
-                        </div>
-
-                    </div>
-                </div>
-                <div class="input-box">
-                    <div class="input-row">
-                        <div class="label">当前IP地址</div>
-                        <div class="text-readOnly" id="wifi_ip">192.181.198.1.1</div>
-                    </div>
-                </div>
-                <div class="input-box">
-                    <div class="input-row">
-                        <div class="label">MAC地址</div>
-                        <div class="text-readOnly" id="wifi_mac">1:0:5e:0:0:fb</div>
-                    </div>
-                </div>
-                <div class="input-box">
-                    <div class="input-row" style="border: none;">
-                        <div class="label">WIFI开关</div>
-                        <!--                switch开关-->
-                        <div class="button-right">
-                            <label><input class="mui-switch" type="checkbox" checked id="wifi_enabled"> </label>
-                        </div>
-
-
+                <div class="input-row">
+                    <span class="wifi-name">WIFIETC-01</span>
+                    <div class="status">
+                        <!--                                                    如果已经连接，则显示已连接-->
+                        <div class="checked"><span>已连接</span></div>
                     </div>
                 </div>
             </div>
+            <h2 class="title-label">WiFi密码：</h2>
+            <div class="input-box">
+                <div class="input-row">
+                    <input type="password" class="input-text" placeholder="请输入密码" id="wifi_password">
+                    <div class="input-img">
+                        <img src="img/clear.png" alt="" class="clear" id="clear-passwrod">
+                        <img src="img/key-open.png" alt="" class="key active" id="key-open">
+                        <img src="img/key-close.png" alt="" class="key " id="key-close">
+                    </div>
 
-        </div>
-        <div class="big_title">
-            <h1>高级配置</h1>
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-row">
+                    <div class="label">当前IP地址</div>
+                    <div class="text-readOnly" id="wifi_ip">192.181.198.1.1</div>
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-row">
+                    <div class="label">MAC地址</div>
+                    <div class="text-readOnly" id="wifi_mac">1:0:5e:0:0:fb</div>
+                </div>
+            </div>
+            <div class="input-box">
+                <div class="input-row" style="border: none;">
+                    <div class="label">WIFI开关</div>
+                    <!--                switch开关-->
+                    <div class="button-right">
+                        <label><input class="mui-switch" type="checkbox" checked id="wifi_enabled"> </label>
+                    </div>
 
+
+                </div>
+            </div>
         </div>
-        <div class="button_submitReset">
+
+    </div>
+    <div class="big_title">
+        <h1>高级配置</h1>
+
+    </div>
+    <div class="button_submitReset">
         <div class="button-wrap">
             <button class="reset" id="advanced-reset">重置</button>
             <button class="submit" id="advanced-submit">提交</button>
         </div>
-        </div>
-        <div class="box-row">
-            <div class="title">
-                <h3 class="title-header">麦克风配置</h3>
-                <div class="title-right"><div class="arr"></div></div>
-            </div>
-            <div class="main-content">
-                <h2 class="title-label">职员方向水平拾音角度</h2>
-                <div class="input-box">
-                    <div class="slider" id="staff_horizon">
-                        <div><span>30°</span></div>
-                        <div><span>45°</span></div>
-                        <div><span>60°</span></div>
-                        <div><span>90°</span></div>
-                        <div><span>120°</span></div>
-                    </div>
-
-                </div>
-                <h2 class="title-label">职员方向竖直拾音角度</h2>
-                <div class="input-box" >
-                    <div class="slider" id="staff_vertical">
-                        <div><span>30°</span></div>
-                        <div><span>45°</span></div>
-                        <div><span>60°</span></div>
-                        <div><span>90°</span></div>
-                        <div><span>120°</span></div>
-                    </div>
-
-                </div>
-                <h2 class="title-label">客户方向水平拾音角度</h2>
-                <div class="input-box">
-                    <div class="slider" id="customer_horizontal">
-                        <div><span>30°</span></div>
-                        <div><span>45°</span></div>
-                        <div><span>60°</span></div>
-                        <div><span>90°</span></div>
-                        <div><span>120°</span></div>
-                    </div>
-
-                </div>
-                <h2 class="title-label">客户方向竖直拾音角度</h2>
-                <div class="input-box">
-                    <div class="slider" id="customer_vertical">
-                        <div><span>30°</span></div>
-                        <div><span>45°</span></div>
-                        <div><span>60°</span></div>
-                        <div><span>90°</span></div>
-                        <div><span>120°</span></div>
-                    </div>
-
-                </div>
-            </div>
-
-
-        </div>
-        <div class="box-row">
-            <div class="title">
-                <h3 class="title-header">感应距离配置</h3>
-                <div class="title-right"><div class="arr"></div></div>
-            </div>
-            <div class="main-content">
-                <div class="input-box">
-                    <div class="input-wrap">
-                        <div class="label-text">感应距离（cm）</div>
-                        <div class="input">
-                            <input type="number" id="distance_gauge_set" placeholder="请输入1~200的值">
-                            <!--                        <span class="tips">请输入1~200的值</span>-->
-                            <span class="errorTips" id="distance_gauge_set_error">超出限制 1~200</span>
-                        </div>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="label-text">感应离开延迟时间（秒）</div>
-                        <div class="input">
-                            <input type="number" id="distance_gauge_time" placeholder="请输入1~60的值">
-                            <!--                        <span class="tips">请输入1~60的值</span>-->
-                            <span class="errorTips" id="distance_gauge_time_error">超出限制 1~60</span>
-                        </div>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="label-text">感应开关(ToF)</div>
-                        <div class="">
-                            <div class="button-right">
-                                <label><input class="mui-switch" type="checkbox" id="distance_gauge_enabled"> </label>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
-
-
-        </div>
-        <div class="box-row">
-            <div class="title">
-                <h3 class="title-header">服务器配置</h3>
-                <div class="title-right"><div class="arr"></div></div>
-            </div>
-            <div class="main-content">
-                <div class="input-box">
-                    <div class="input-wrap">
-                        <div class="label-text">网络管理平台域名</div>
-                        <div class="input">
-                            <input type="text" id="server_domain">
-                            <span class="errorTips" id="server_domain_error">输入不符合格式</span>
-                        </div>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="label-text">网络管理平台IP</div>
-                        <div class="input">
-                            <input type="text" id="server_ip">
-                            <span class="errorTips" id="server_ip_error">输入不符合格式</span>
-                        </div>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="label-text">网络管理平台端口</div>
-                        <div class="input">
-                            <input type="text" id="server_port">
-                            <span class="errorTips" id="server_port_error">输入不符合格式</span>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-        <div class="box-row">
-            <div class="title">
-                <h3 class="title-header">有线网络配置</h3>
-                <div class="title-right"><div class="arr"></div></div>
-            </div>
-            <div class="main-content">
-                <div class="input-box">
-                    <div class="input-wrap">
-                        <div class="label-text">有线网络MAC地址</div>
-                        <div class="input">
-                            <input type="text" id="wired_mac" readonly>
-                            <span class="errorTips no_connect" id="wired_mac_error" >输入不符合格式</span>
-                        </div>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="label-text">有线网络IP地址</div>
-                        <div class="input">
-                            <input type="text" id="wired_ip" readonly>
-                            <span class="errorTips no_connect" id="wired_ip_error">输入不符合格式</span>
-                        </div>
-                    </div>
-
-                </div>
-            </div>
-
-        </div>
-        
     </div>
+    <div class="box-row">
+        <div class="title">
+            <h3 class="title-header">麦克风配置</h3>
+            <div class="title-right"><div class="arr"></div></div>
+        </div>
+        <div class="main-content">
+            <h2 class="title-label">职员方向水平拾音角度</h2>
+            <div class="input-box">
+                <div class="slider" id="staff_horizon">
+                    <div><span>30°</span></div>
+                    <div><span>45°</span></div>
+                    <div><span>60°</span></div>
+                    <div><span>90°</span></div>
+                    <div><span>120°</span></div>
+                </div>
+
+            </div>
+            <h2 class="title-label">职员方向竖直拾音角度</h2>
+            <div class="input-box" >
+                <div class="slider" id="staff_vertical">
+                    <div><span>30°</span></div>
+                    <div><span>45°</span></div>
+                    <div><span>60°</span></div>
+                    <div><span>90°</span></div>
+                    <div><span>120°</span></div>
+                </div>
+
+            </div>
+            <h2 class="title-label">客户方向水平拾音角度</h2>
+            <div class="input-box">
+                <div class="slider" id="customer_horizontal">
+                    <div><span>30°</span></div>
+                    <div><span>45°</span></div>
+                    <div><span>60°</span></div>
+                    <div><span>90°</span></div>
+                    <div><span>120°</span></div>
+                </div>
+
+            </div>
+            <h2 class="title-label">客户方向竖直拾音角度</h2>
+            <div class="input-box">
+                <div class="slider" id="customer_vertical">
+                    <div><span>30°</span></div>
+                    <div><span>45°</span></div>
+                    <div><span>60°</span></div>
+                    <div><span>90°</span></div>
+                    <div><span>120°</span></div>
+                </div>
+
+            </div>
+        </div>
+
+
+    </div>
+    <div class="box-row">
+        <div class="title">
+            <h3 class="title-header">感应距离配置</h3>
+            <div class="title-right"><div class="arr"></div></div>
+        </div>
+        <div class="main-content">
+            <div class="input-box">
+                <div class="input-wrap">
+                    <div class="label-text">感应距离（cm）</div>
+                    <div class="input">
+                        <input type="number" id="distance_gauge_set" placeholder="请输入1~200的值">
+                        <!--                        <span class="tips">请输入1~200的值</span>-->
+                        <span class="errorTips" id="distance_gauge_set_error">超出限制 1~200</span>
+                    </div>
+                </div>
+                <div class="input-wrap">
+                    <div class="label-text">感应离开延迟时间（秒）</div>
+                    <div class="input">
+                        <input type="number" id="distance_gauge_time" placeholder="请输入1~60的值">
+                        <!--                        <span class="tips">请输入1~60的值</span>-->
+                        <span class="errorTips" id="distance_gauge_time_error">超出限制 1~60</span>
+                    </div>
+                </div>
+                <div class="input-wrap">
+                    <div class="label-text">感应开关(ToF)</div>
+                    <div class="">
+                        <div class="button-right">
+                            <label><input class="mui-switch" type="checkbox" id="distance_gauge_enabled"> </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+
+    </div>
+    <div class="box-row">
+        <div class="title">
+            <h3 class="title-header">服务器配置</h3>
+            <div class="title-right"><div class="arr"></div></div>
+        </div>
+        <div class="main-content">
+            <div class="input-box">
+                <div class="input-wrap">
+                    <div class="label-text">网络管理平台域名</div>
+                    <div class="input">
+                        <input type="text" id="server_domain">
+                        <span class="errorTips" id="server_domain_error">输入不符合格式</span>
+                    </div>
+                </div>
+                <div class="input-wrap">
+                    <div class="label-text">网络管理平台IP</div>
+                    <div class="input">
+                        <input type="text" id="server_ip">
+                        <span class="errorTips" id="server_ip_error">输入不符合格式</span>
+                    </div>
+                </div>
+                <div class="input-wrap">
+                    <div class="label-text">网络管理平台端口</div>
+                    <div class="input">
+                        <input type="text" id="server_port">
+                        <span class="errorTips" id="server_port_error">输入不符合格式</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="box-row">
+        <div class="title">
+            <h3 class="title-header">有线网络配置</h3>
+            <div class="title-right"><div class="arr"></div></div>
+        </div>
+        <div class="main-content">
+            <div class="input-box">
+                <div class="input-wrap">
+                    <div class="label-text">有线网络MAC地址</div>
+                    <div class="input">
+                        <input type="text" id="wired_mac" readonly>
+                        <span class="errorTips no_connect" id="wired_mac_error" >输入不符合格式</span>
+                    </div>
+                </div>
+                <div class="input-wrap">
+                    <div class="label-text">有线网络IP地址</div>
+                    <div class="input">
+                        <input type="text" id="wired_ip" readonly>
+                        <span class="errorTips no_connect" id="wired_ip_error">输入不符合格式</span>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+    </div>
+
+</div>
 
 
 </body>

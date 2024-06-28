@@ -305,17 +305,17 @@ $(document).ready(function () {
         initializeForm(initialConfig);
     });
 //download_Mp3
-    $("#download_Mp3").click(function (event) {
-        console.log("开始下载window.location.href")
-        window.location.href='http://192.168.2.1/record/download'
+$("#download_Mp3").click(function (event) {
+    console.log("开始下载window.location.href")
+    window.location.href='http://192.168.2.1/record/download'
 
 
-    });
+});
     //点击重启
     $('#restart').click(function () {
         var restart = confirm("确定重启设备吗？");
         if (restart) {
-
+        
             $.ajax({
                 url: base_url + "/restart",
                 type: "POST",
@@ -348,6 +348,19 @@ $(document).ready(function () {
 
 
     });
+    $("#key-open").click(function () {
+        //显示密码
+        $("#wifi_password").attr("type", "text");
+        $("#key-open").hide()
+        $("#key-close").show()
+    })
+    $("#key-close").click(function () {
+        //不显示密码
+        $("#key-close").hide()
+        $("#key-open").show()
+        $("#wifi_password").attr("type", "password");
+
+    })
     //distance_gauge_set 感应距离设置
     $("#distance_gauge_set").on('input', function (e) {
         if(e.delegateTarget.value>200||e.delegateTarget.value<1){
@@ -365,16 +378,16 @@ $(document).ready(function () {
     });
     //distance_gauge_time 感应时间
     $("#distance_gauge_time").on('input', function (e) {
-        if(e.delegateTarget.value>60||e.delegateTarget.value<1){
-            if(e.delegateTarget.value!=""){
-                $("#distance_gauge_time_error").show()
-                // e.delegateTarget.value = "";
-            }
+    if(e.delegateTarget.value>60||e.delegateTarget.value<1){
+        if(e.delegateTarget.value!=""){
+            $("#distance_gauge_time_error").show()
+               // e.delegateTarget.value = "";
+ }
 
-        }else{
-            $("#distance_gauge_time_error").hide()
-            updatedConfig_.advanced.distance_gauge.time = e.delegateTarget.value;
-        }
+    }else{
+        $("#distance_gauge_time_error").hide()
+        updatedConfig_.advanced.distance_gauge.time = e.delegateTarget.value;
+       }
     });
     var domainReg = /^(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,})|\[(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|\[(?:[0-9a-fA-F]{1,4}:){1,7}:|[0-9a-fA-F]{1,4}:(:[0-9a-fA-F]{1,4}){1,6}])$/;
     var ipReg =  /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/;
@@ -442,34 +455,34 @@ $(document).ready(function () {
     });
 
 //staff_horizon职员方向水平拾音角度
-    $('#staff_horizon div').on('click', function () {
-        $(this).addClass('active').siblings().removeClass('active')
-        var angle = $(this).find('span').text();
-        console.log("当前点击的职员方向水平拾音角度", updatedConfig_);
-        updatedConfig_.advanced.mic.staff_horizon = parseInt(angle);
-    });
+$('#staff_horizon div').on('click', function () {
+    $(this).addClass('active').siblings().removeClass('active')
+    var angle = $(this).find('span').text();
+    console.log("当前点击的职员方向水平拾音角度", updatedConfig_);
+    updatedConfig_.advanced.mic.staff_horizon = parseInt(angle);
+});
 //staff_vertical职员方向垂直拾音角度
-    $('#staff_vertical div').on('click', function () {
-        $(this).addClass('active').siblings().removeClass('active')
-        var angle = $(this).find('span').text();
-        // console.log(angle)
-        console.log("当前点击的职员方向垂直拾音角度", updatedConfig_);
-        updatedConfig_.advanced.mic.staff_vertical = parseInt(angle);
-    });
+$('#staff_vertical div').on('click', function () {
+    $(this).addClass('active').siblings().removeClass('active')
+    var angle = $(this).find('span').text();
+    // console.log(angle)
+    console.log("当前点击的职员方向垂直拾音角度", updatedConfig_);
+    updatedConfig_.advanced.mic.staff_vertical = parseInt(angle);
+});
 //customer_horizontal客户方向水平拾音角度
-    $('#customer_horizontal div').on('click', function () {
-        $(this).addClass('active').siblings().removeClass('active')
-        var angle = $(this).find('span').text();
-        console.log("当前点击的客户方向水平拾音角度", updatedConfig_);
-        updatedConfig_.advanced.mic.customer_horizontal = parseInt(angle);
-    });
+$('#customer_horizontal div').on('click', function () {
+    $(this).addClass('active').siblings().removeClass('active')
+    var angle = $(this).find('span').text();
+    console.log("当前点击的客户方向水平拾音角度", updatedConfig_);
+    updatedConfig_.advanced.mic.customer_horizontal = parseInt(angle);
+});
 //customer_vertical客户方向垂直拾音角度
-    $('#customer_vertical div').on('click', function () {
-        $(this).addClass('active').siblings().removeClass('active')
-        var angle = $(this).find('span').text();
-        console.log("当前点击的客户方向垂直拾音角度", updatedConfig_);
-        updatedConfig_.advanced.mic.customer_vertical = parseInt(angle)
-    })
+$('#customer_vertical div').on('click', function () {
+    $(this).addClass('active').siblings().removeClass('active')
+    var angle = $(this).find('span').text();
+    console.log("当前点击的客户方向垂直拾音角度", updatedConfig_);
+    updatedConfig_.advanced.mic.customer_vertical = parseInt(angle)
+})
 
 
     // 点击基础配置提交按钮
