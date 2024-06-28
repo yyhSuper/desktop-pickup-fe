@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Recorder</title>
+    <style>
+        #audio-visualizer {
+            width: 100%;
+            height: 150px;
+            background: black;
+        }
+    </style>
+</head>
+<body>
+<button id="start">Start Recording</button>
+<button id="stop" style="display: none;">Stop Recording</button>
+<div id="record-time" style="display: none;">
+    <span id="record-time-text">00:00</span>
+</div>
+<canvas id="audio-visualizer"></canvas>
+<script>
+    let timerInterval;
+    let seconds = 0;
+    let audioCtx;
+    let analyser;
+    let dataArray;
+    let bufferLength;
+    let source;
+    let animationId;
+    let controller;
+    let reader;
+    const canvas = document.getElementById('audio-visualizer');
+    const canvasCtx = canvas.getContext('2d');
+    let x = 0;
+
+    document.getElementById('start').addEventListener('click', function() {
+        this.style.display = 'none';
+        document.getElementById('stop').style.display = 'block';
+        document.getElementById('record-time').style.display = 'block';
+        startRecording();
+    });
+
+    document.getElementById('stop').addEventListener('click', function() {
+        this.style.display = 'none';
+        document.getElementById('start').style.display = 'block';
+        document.getElementById('record-time').style.display = 'none';
+        stopRecording();
+    });
+
+    function initAudioContext() {
+        if (!audioCtx) {
+            try {
+                audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+                console.log('AudioContext initialized successfully');
+            } catch (e) {
+                console.error('Unable to create AudioContext:', e);
+            }
+        }
+    }
+
+    initAudioContext();
+
+    function startTimer() {
+        seconds = 0;
+        updateTimerDisplay(seconds);
+        clearInterval(timerInterval);
+        timerInterval = setInterval(function() {
+            seconds++;
+            updateTimerDisplay(seconds);
+        }, 1000);
+        console.log('Timer started');
+    }
+
+    function stopTimer() {
+        clearInterval(timerInterval);
+        console.log('Timer stopped');
+    }
+
+    function updateTimerDisplay(seconds) {
+        let minutes = Math.floor(seconds / 60);
+        let remainingSeconds = seconds % 60;
+        let formattedTime = (minutes < 10 ? '0' : '') + minutes + ':' + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
+        document.getElementById('record-time-text').textContent = formattedTime;
+    }
+
+    async function startRecording() {
+        stopRecording();
+        initAudioContext();
+
+        analyser = audioCtx.createAnalyser();
+        analyser.fftSize = 2048;
+        bufferLength = analyser.frequencyBinCount;
+        dataArray = new Uint8Array(bufferLength);
+        controller = new AbortController();
+
+        try {
+            const response = await fetch('http://192.168.2.1/record/stream', {
+                method: 'GET',
+                signal: controller.signal
+            });
+
+            if (!response.ok) {
+                throw new Error('HTTP request failed: ' + response.statusText);
+            }
+
+            reader = response.body.getReader();
+            startTimer();
+            reader.read().then(processResult).catch(error => {
+                if (error.name === 'AbortError') {
+                    console.log('Reading aborted by user');
+                } else {
+                    console.error('Error reading audio data:', error);
+                }
+            });
+        } catch (error) {
+            if (error.name === 'AbortError') {
+                console.log('Request aborted by user');
+            } else {
+                console.error('Error requesting audio stream', error);
+            }
+        }
+    }
+
+    async function processResult(result) {
+        if (result.done) {
+            console.log('Reading complete');
+            stopRecording();
+            return;
+        }
+
+        console.log('Received data chunk:', result.value);
+
+        try {
+            const audioBlob = new Blob([result.value], { type: 'audio/mpeg' });
+            const audioUrl = URL.createObjectURL(audioBlob);
+            const decodedAudioData = await decodeAndPlay(audioUrl);
+            if (decodedAudioData) {
+                draw();
+            }
+            URL.revokeObjectURL(audioUrl);
+        } catch (error) {
+            console.error('Error decoding and playing audio data:', error);
+        }
+
+        reader.read().then(processResult);
+    }
+
+    async function decodeAndPlay(audioUrl) {
+        const response = await fetch(audioUrl);
+        const arrayBuffer = await response.arrayBuffer();
+        const decodedAudioData = await audioCtx.decodeAudioData(arrayBuffer);
+        if (decodedAudioData) {
+            source = audioCtx.createBufferSource();
+            source.buffer = decodedAudioData;
+            source.connect(analyser);
+            source.connect(audioCtx.destination);
+            source.start(0);
+            source.onended = () => {
+                source.disconnect();
+            };
+            return decodedAudioData;
+        }
+        return null;
+    }
+
+    function stopRecording() {
+        console.log('Stopping recording');
+        if (controller) {
+            controller.abort();
+        }
+        if (source) {
+            source.stop();
+            source.disconnect();
+            console.log('Audio source stopped');
+        }
+        if (animationId) {
+            cancelAnimationFrame(animationId);
+        }
+        stopTimer();
+    }
+
+    function draw() {
+        if (!analyser) return;
+        animationId = requestAnimationFrame(draw);
+        analyser.getByteTimeDomainData(dataArray);
+        canvasCtx.fillStyle = 'black';
+        canvasCtx.fillRect(0, 0, canvas.width, canvas.height);
+
+        canvasCtx.lineWidth = 2;
+        canvasCtx.strokeStyle = '#fa541c';
+        canvasCtx.beginPath();
+        let sliceWidth = canvas.width * 1.0 / bufferLength;
+        let x = 0;
+        for (let i = 0; i < bufferLength; i++) {
+            let v = dataArray[i] / 128.0;
+            let y = v * canvas.height / 2;
+            if (i === 0) {
+                canvasCtx.moveTo(x, y);
+            } else {
+                canvasCtx.lineTo(x, y);
+            }
+            x += sliceWidth;
+        }
+        canvasCtx.lineTo(canvas.width, canvas.height / 2);
+        canvasCtx.stroke();
+
+        // 滚动效果
+        const imageData = canvasCtx.getImageData(sliceWidth, 0, canvas.width - sliceWidth, canvas.height);
+        canvasCtx.putImageData(imageData, 0, 0);
+        canvasCtx.clearRect(canvas.width - sliceWidth, 0, sliceWidth, canvas.height);
+    }
+</script>
+</body>
+</html>

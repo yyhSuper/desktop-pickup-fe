@@ -46,11 +46,11 @@ header .left-wrap h1 {
 header .left-wrap img.logo {
     margin: 0;
     height:24px;
-
+   
     width:auto
 }
 header .left-wrap img.x {
-
+   
     height:9px;
     margin: 0 10px;
     width:auto
@@ -68,7 +68,7 @@ header  .right-wrap #restart{
 header  .right-wrap img.restart{
     width: 16px;
     display: inline-block;
-
+    
 }
 header  .right-wrap span{
     font-weight: 500;
@@ -87,7 +87,7 @@ header  .right-wrap span{
 .container .box-row {background:#fff;height: auto;border-radius: 8px 8px 8px 8px;padding:24px 16px ;margin-bottom:13px;}
 .container .main-content{display:none;}
 .container .box-row  .title{display:flex;flex-direction:row;justify-content: space-between;align-items: center;margin-bottom: 15px;
-    cursor: pointer
+cursor: pointer
 }
 .container .box-row  .title-header{font-size:16px;font-weight: bold;display: flex;justify-content: left;align-items: center;background: none;}
 .container .box-row  .title-header h3{font-size:16px;font-weight: bold;display: flex;}
@@ -124,8 +124,8 @@ header  .right-wrap span{
 .audio-player audio{
     width: 100%;
     color:#00A2FF;
-
-
+  
+    
 }
 .noData{text-align: center;color: #ff0000;font-size: 12px;padding: 20px;}
 #download_Mp3{display:block;}
@@ -220,7 +220,7 @@ header  .right-wrap span{
 .button_submitReset .button-wrap button{
     width:56px;
     height:24px;
-    font-size:12px;
+font-size:12px;
     border-radius: 20px 20px 20px 20px;
     border:none;
     margin-right:16px;
@@ -329,9 +329,9 @@ header  .right-wrap span{
 }
 
 label{
-    display:block;
-    vertical-align: middle;
-}
+     display:block;
+     vertical-align: middle;
+ }
 label, input, select{
     vertical-align: middle;
 }
@@ -343,7 +343,7 @@ label, input, select{
     background-color: #E5E5E5;
     box-shadow: #dfdfdf 0 0 0 0 inset;
     border-radius: 20px;
-
+    
     border-top-left-radius: 20px;
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
@@ -392,36 +392,36 @@ label, input, select{
     background-color: #00A2FF;
     transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s; }
 .mui-switch.mui-switch-anim:checked:before {transition: left 0.3s; }
-.input-box  .slider{display: flex; flex-direction:row; justify-content: space-between; align-items: center;width: 100%;margin-top: 16px;}
-.input-box  .slider div{width:auto;padding: 4px 15px;;background:  #f4f4f4;border-radius: 4px;text-align: center;display: flex;justify-content: center;align-items: center;}
-.input-box  .slider div span{font-size: 12px;cursor: pointer;}
-.input-box  .slider div.active{background: #00A2FF;}
-.input-box  .slider div.active span{color: #ffffff;}
-.input-box  .input-wrap{
-    display: flex;
-    flex-direction: row;
-    justify-content: space-between;
-    align-items: center;
-    margin-top: 30px;
+    .input-box  .slider{display: flex; flex-direction:row; justify-content: space-between; align-items: center;width: 100%;margin-top: 16px;}
+    .input-box  .slider div{width:auto;padding: 4px 15px;;background:  #f4f4f4;border-radius: 4px;text-align: center;display: flex;justify-content: center;align-items: center;}
+    .input-box  .slider div span{font-size: 12px;cursor: pointer;}
+    .input-box  .slider div.active{background: #00A2FF;}
+    .input-box  .slider div.active span{color: #ffffff;}
+    .input-box  .input-wrap{
+        display: flex;
+        flex-direction: row;
+        justify-content: space-between;
+        align-items: center;
+        margin-top: 30px;
 
-}
-.input-box  .input-wrap .label-text{
-    font-weight: 400;
-    font-size: 14px;
-    color: rgba(0,0,0,0.85);
-    line-height: 16px;
-    text-align: left;
-    font-style: normal;
-    text-transform: none;
-    min-width: 120px;
-    margin-right: 16px;
-}
-.input-box  .input-wrap .input{height: 35px;border-bottom: 1px solid rgba(0,0,0,0.05);flex: 1;display: flex;flex-direction: row;align-items: center;justify-content: left;}
-.input-box  .input-wrap .input input{width: 80px;height: 35px;border: none;background: none;padding-left: 10px;flex: 1;outline: none;}
-.input-box  .input-wrap .input  span.errorTips{font-size: 12px;color: #F30000;display: none;}
-.input-box  .input-wrap .input  span.errorTips.no_connect{color: #FF7235;;}
-.input-box  .input-wrap .input  span.errorTips.active{display: inline;}
-.input-box  .input-wrap .input  span.tips{font-size: 12px;color: #999;}
-.rotate {
-    transform: rotate(90deg);
-}
+    }
+    .input-box  .input-wrap .label-text{
+        font-weight: 400;
+        font-size: 14px;
+        color: rgba(0,0,0,0.85);
+        line-height: 16px;
+        text-align: left;
+        font-style: normal;
+        text-transform: none;
+        min-width: 120px;
+        margin-right: 16px;
+    }
+    .input-box  .input-wrap .input{height: 35px;border-bottom: 1px solid rgba(0,0,0,0.05);flex: 1;display: flex;flex-direction: row;align-items: center;justify-content: left;}
+    .input-box  .input-wrap .input input{width: 80px;height: 35px;border: none;background: none;padding-left: 10px;flex: 1;outline: none;}
+    .input-box  .input-wrap .input  span.errorTips{font-size: 12px;color: #F30000;display: none;}
+    .input-box  .input-wrap .input  span.errorTips.no_connect{color: #FF7235;;}
+    .input-box  .input-wrap .input  span.errorTips.active{display: inline;}
+    .input-box  .input-wrap .input  span.tips{font-size: 12px;color: #999;}
+    .rotate {
+        transform: rotate(90deg);
+    }

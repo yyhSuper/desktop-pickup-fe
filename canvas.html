@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Audio Visualizer</title>
+    <style>
+        .audio-box {
+            width: 80%;
+            margin: auto;
+            text-align: center;
+        }
+        .audio-row {
+            margin: 20px 0;
+        }
+        .audio-main {
+            width: 100%;
+            height: 200px;
+            background-color: #f0f0f0;
+            border: 1px solid #ccc;
+        }
+        canvas {
+            width: 100%;
+            height: 100%;
+        }
+        #button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        #button:hover {
+            background-color: #0056b3;
+        }
+    </style>
+</head>
+<body>
+<div class="audio-box">
+    <div class="audio-row">
+        <span>声道1：</span>
+        <div class="audio-main">
+            <canvas id="audio-visualizer-2"></canvas>
+        </div>
+    </div>
+    <div class="audio-row">
+        <span>声道2：</span>
+        <div class="audio-main">
+            <canvas id="audio-visualizer-1"></canvas>
+        </div>
+    </div>
+    <div id="button">开始</div>
+</div>
+<script src="js/canvas.js"></script>
+</body>
+</html>

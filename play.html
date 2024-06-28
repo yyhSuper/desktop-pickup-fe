@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Custom Audio Player</title>
+  <link rel="stylesheet" href="style/play.css">
+</head>
+
+<body>
+<div class="audio-player">
+  <div class="audio-controls">
+    <div class="time-display">
+      <span class="current-time">0:00</span>
+      <div class="progress-bar">
+        <div class="progress-background"></div>
+        <div class="progress-bar-current"></div>
+        <div class="progress-handle"></div>
+      </div>
+      <span class="total-time">0:00</span>
+    </div>
+    <button class="play-pause-button">
+      <svg viewBox="0 0 24 24" class="play-icon">
+        <path fill="#000000" d="M8,5.14V18.86L19,12L8,5.14z M10,14.14V9.86L15,12L10,14.14z"></path>
+      </svg>
+      <svg viewBox="0 0 24 24" class="pause-icon">
+        <rect fill="#00A2FF" height="24" width="6" x="8" y="0"></rect>
+        <rect fill="#00A2FF" height="24" width="6" x="14" y="0"></rect>
+      </svg>
+    </button>
+  </div>
+</div>
+<audio id="audio" src="media/test.mp3"></audio>
+<script src="js/player.js"></script>
+</body>
+
+</html>
