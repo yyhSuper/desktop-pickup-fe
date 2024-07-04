@@ -302,7 +302,13 @@ $(document).ready(function () {
 
     // 点击重置按钮时，重新加载初始配置
     $('#basic-reset, #advanced-reset').click(function () {
-        initializeForm(initialConfig);
+        //确认弹窗
+        if (confirm("确定要重置配置吗？")) {
+
+            // 重置配置
+            initializeForm(initialConfig);
+        }
+
     });
 //download_Mp3
 $("#download_Mp3").click(function (event) {
