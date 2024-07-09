@@ -187,7 +187,11 @@
                         <div class="label">WIFI开关</div>
                         <!--                switch开关-->
                         <div class="button-right">
-                            <label><input class="mui-switch" type="checkbox" checked id="wifi_enabled"> </label>
+<!--                            <label><input class="mui-switch" type="checkbox" checked id="wifi_enabled"> </label>-->
+                            <label class="switch">
+                                <input type="checkbox" id="wifi_enabled">
+                                <span class="slider"></span>
+                            </label>
                         </div>
 
 
@@ -214,7 +218,7 @@
             <div class="main-content">
                 <h2 class="title-label">水平拾音角度</h2>
                 <div class="input-box">
-                    <div class="slider" id="staff_horizon">
+                    <div class="slider-box" id="staff_horizon">
                         <div><span>30°</span></div>
                         <div><span>45°</span></div>
                         <div><span>60°</span></div>
@@ -225,7 +229,7 @@
                 </div>
                 <h2 class="title-label">竖直拾音角度</h2>
                 <div class="input-box" >
-                    <div class="slider" id="staff_vertical">
+                    <div class="slider-box" id="staff_vertical">
                         <div><span>30°</span></div>
                         <div><span>45°</span></div>
                         <div><span>60°</span></div>
@@ -287,7 +291,11 @@
                         <div class="label-text">感应开关(ToF)</div>
                         <div class="">
                             <div class="button-right">
-                                <label><input class="mui-switch" type="checkbox" id="distance_gauge_enabled"> </label>
+<!--                                <label><input class="mui-switch" type="checkbox" id="distance_gauge_enabled"> </label>-->
+                                <label class="switch">
+                                    <input type="checkbox" id="distance_gauge_enabled">
+                                    <span class="slider"></span>
+                                </label>
                             </div>
                         </div>
                     </div>

@@ -327,7 +327,7 @@ font-size:12px;
     font-style: normal;
     text-transform: none;
 }
-
+/*
 label{
      display:block;
      vertical-align: middle;
@@ -339,9 +339,9 @@ label, input, select{
     width: 52px;
     height: 31px;
     position: relative;
-    border: 1px solid #dfdfdf;
+    border: 1px solid #8dc21f;
     background-color: #E5E5E5;
-    box-shadow: #dfdfdf 0 0 0 0 inset;
+    box-shadow: #8dc21f 0 0 0 0 inset;
     border-radius: 20px;
     
     border-top-left-radius: 20px;
@@ -365,12 +365,12 @@ label, input, select{
     border-top-right-radius: 20px;
     border-bottom-left-radius: 20px;
     border-bottom-right-radius: 20px;
-    background-color: #fff;
+    background-color: #00A2FF;
     box-shadow: 0 1px 3px rgba(0, 0, 0, 0.4); }
 .mui-switch:checked {
-    border-color: #00A2FF;
-    box-shadow: #00A2FF 0 0 0 16px inset;
-    background-color: #00A2FF; }
+    border-color: #8dc21f;
+    box-shadow: #8dc21f 0 0 0 16px inset;
+    background-color: #8dc21f; }
 .mui-switch:checked:before {
     left: 21px; }
 .mui-switch.mui-switch-animbg {
@@ -378,8 +378,8 @@ label, input, select{
 .mui-switch.mui-switch-animbg:before {
     transition: left 0.3s; }
 .mui-switch.mui-switch-animbg:checked {
-    box-shadow: #dfdfdf 0 0 0 0 inset;
-    background-color: #00A2FF;
+    box-shadow: #00A2FF 0 0 0 0 inset;
+    background-color: #8dc21f;
     transition: border-color 0.4s, background-color ease 0.4s; }
 .mui-switch.mui-switch-animbg:checked:before {
     transition: left 0.3s; }
@@ -388,15 +388,89 @@ label, input, select{
 .mui-switch.mui-switch-anim:before {
     transition: left 0.3s; }
 .mui-switch.mui-switch-anim:checked {
-    box-shadow: #00A2FF 0 0 0 16px inset;
-    background-color: #00A2FF;
+    box-shadow: #8dc21f 0 0 0 16px inset;
+    background-color: #8dc21f;
     transition: border ease 0.4s, box-shadow ease 0.4s, background-color ease 1.2s; }
-.mui-switch.mui-switch-anim:checked:before {transition: left 0.3s; }
-    .input-box  .slider{display: flex; flex-direction:row; justify-content: space-between; align-items: center;width: 100%;margin-top: 16px;}
-    .input-box  .slider div{width:auto;padding: 4px 15px;;background:  #f4f4f4;border-radius: 4px;text-align: center;display: flex;justify-content: center;align-items: center;}
-    .input-box  .slider div span{font-size: 12px;cursor: pointer;}
-    .input-box  .slider div.active{background: #00A2FF;}
-    .input-box  .slider div.active span{color: #ffffff;}
+.mui-switch.mui-switch-anim:checked:before {transition: left 0.3s; }*/
+    .input-box  .slider-box{display: flex; flex-direction:row; justify-content: space-between; align-items: center;width: 100%;margin-top: 16px;}
+    .input-box  .slider-box div{width:auto;padding: 4px 15px;;background:  #F4F4F4;border-radius: 4px;text-align: center;display: flex;justify-content: center;align-items: center;}
+    .input-box  .slider-box div span{font-size: 12px;cursor: pointer;}
+    .input-box  .slider-box div.active{background: #00A2FF;}
+    .input-box  .slider-box div.active span{color: #fff;}
+
+
+/* 开关样式 */
+.switch {
+    position: relative;
+    display: inline-block;
+    width: 60px;
+    height: 34px;
+    border-radius: 34px;
+    overflow: hidden;
+}
+
+.switch input {
+    opacity: 0;
+    width: 0;
+    height: 0;
+}
+
+/* 解决在开关时出现的矩形背景色问题 */
+.slider {
+    position: absolute;
+    cursor: pointer;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-color: #8dc21f;
+    transition: .4s;
+    border-radius: 34px;
+    overflow: hidden; /* 防止背景颜色溢出 */
+}
+
+.slider:before {
+    position: absolute;
+    content: "";
+    height: 26px;
+    width: 26px;
+    left: 4px;
+    bottom: 4px;
+    background-color: white;
+    transition: .4s;
+    border-radius: 50%;
+    overflow: hidden;
+}
+
+input:checked + .slider {
+    background-color: #00A2FF;
+    overflow: hidden;
+}
+
+input:checked + .slider:before {
+    transform: translateX(26px);
+}
+
+/* 增加浏览器兼容性 */
+.slider, .slider:before {
+    -webkit-transition: .4s;
+    -moz-transition: .4s;
+    -o-transition: .4s;
+    transition: .4s;
+    -webkit-border-radius: 34px;
+    -moz-border-radius: 34px;
+    -o-border-radius: 34px;
+    border-radius: 34px;
+    overflow: hidden;
+}
+
+.slider:before {
+    -webkit-border-radius: 50%;
+    -moz-border-radius: 50%;
+    -o-border-radius: 50%;
+    border-radius: 50%;
+    overflow: hidden;
+}
     .input-box  .input-wrap{
         display: flex;
         flex-direction: row;
@@ -425,3 +499,15 @@ label, input, select{
     .rotate {
         transform: rotate(90deg);
     }
+/* 黑暗模式 */
+@media (prefers-color-scheme: dark) {
+    body{
+        background:#eeeeee !important;
+    }
+
+    .container .box-row {background:#f7f7f7 !important;}
+
+    .slider:before {
+        background-color: red !important; /* 保持小圆为白色 */
+    }
+}
