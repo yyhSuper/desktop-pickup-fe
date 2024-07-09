@@ -178,7 +178,131 @@ $(document).ready(function () {
             }
         }
     }
-    var initialConfig = {};
+    var initialConfig = {
+        "basic": {
+            "wifi": {
+                "ip": "192.168.0.124",
+                "mac": "50:41:1C:39:CD:AE",
+                "enabled": true,
+                "ssids": [
+                    {
+                        "ssid": "VIP888",
+                        "signal_level": "high",
+                        "signal_dbm": -32,
+                        "status": false
+                    },
+                    {
+                        "ssid": "huixia2.4G",
+                        "signal_level": "high",
+                        "signal_dbm": -31,
+                        "status": true
+                    },
+                    {
+                        "ssid": "huixia2.4G",
+                        "signal_level": "high",
+                        "signal_dbm": -36,
+                        "status": true
+                    },
+                    {
+                        "ssid": "ChinaNet-2NZk",
+                        "signal_level": "middle",
+                        "signal_dbm": -40,
+                        "status": true
+                    },
+                    {
+                        "ssid": "87003",
+                        "signal_level": "middle",
+                        "signal_dbm": -58,
+                        "status": true
+                    },
+                    {
+                        "ssid": "pj&zh",
+                        "signal_level": "low",
+                        "signal_dbm": -63,
+                        "status": true
+                    },
+                    {
+                        "ssid": "ChinaNet-Tpki",
+                        "signal_level": "low",
+                        "signal_dbm": -65,
+                        "status": true
+                    },
+                    {
+                        "ssid": "ChinaNet-Tpki",
+                        "signal_level": "low",
+                        "signal_dbm": -66,
+                        "status": true
+                    },
+                    {
+                        "ssid": "86002",
+                        "signal_level": "low",
+                        "signal_dbm": -68,
+                        "status": true
+                    },
+                    {
+                        "ssid": "ChinaNet-3591",
+                        "signal_level": "low",
+                        "signal_dbm": -70,
+                        "status": true
+                    },
+                    {
+                        "ssid": "87001",
+                        "signal_level": "low",
+                        "signal_dbm": -72,
+                        "status": true
+                    },
+                    {
+                        "ssid": "87005",
+                        "signal_level": "low",
+                        "signal_dbm": -73,
+                        "status": true
+                    },
+                    {
+                        "ssid": "86001",
+                        "signal_level": "low",
+                        "signal_dbm": -78,
+                        "status": true
+                    },
+                    {
+                        "ssid": "86003",
+                        "signal_level": "low",
+                        "signal_dbm": -78,
+                        "status": true
+                    },
+                    {
+                        "ssid": "HJGY-6",
+                        "signal_level": "low",
+                        "signal_dbm": -80,
+                        "status": true
+                    }
+                ]
+            }
+        },
+        "advanced": {
+            "mic": {
+                "staff_horizon": 30,
+                "staff_vertical": 30,
+                "customer_horizontal": 30,
+                "customer_vertical": 30
+            },
+            "distance_gauge": {
+                "max": 200,
+                "min": 1,
+                "time": 2,
+                "enabled": true,
+                "set": 150
+            },
+            "server": {
+                "domain": "36.139.39.189",
+                "ip": "36.139.39.189",
+                "port": 0
+            },
+            "wired": {
+                "ip": "0.0.0.0",
+                "mac": "0A:0C:11:22:33:44"
+            }
+        }
+    };
     $.ajax({
         url: base_url + "/config",
         type: "GET",
@@ -186,7 +310,7 @@ $(document).ready(function () {
         success: function (response) {
             console.log("获取配置成功",response)
             initialConfig=response
-            // console.log("初始化配置", response);
+            console.log("初始化配置", response);
             initializeForm(initialConfig);
         },
         error: function (err) {
@@ -494,11 +618,31 @@ $('#customer_vertical div').on('click', function () {
     // 点击基础配置提交按钮
     $('#basic-submit').click(function () {
         console.log("当前点击的ssid", updatedConfig_.basic.wifi.ssid);
-        if (updatedConfig_.basic.wifi.ssid && updatedConfig_.basic.wifi.password) {
+
+        if(initialConfig.basic.wifi.enabled===true&&updatedConfig_.basic.wifi.enabled===false){
+            //1.wifi开关从 开--->关， 可以提交配置，不需要校验是否选中wifi，输入密码
             submitForm()
-        } else {
-            alert("请选择一个wifi并填写密码")
         }
+        else if(initialConfig.basic.wifi.enabled===false&&updatedConfig_.basic.wifi.enabled===true){
+            // 2. wifi开关从 关-开 ， 可以提交配置，不需要校验是否选中wifi，输入密码
+            submitForm()
+        }
+        else if(initialConfig.basic.wifi.enabled===true&&updatedConfig_.basic.wifi.enabled===true){
+            //3. wifi开关状态不变【一直是开】，此时提交，需要判断是否选中wifi，是否输入密码
+            if (updatedConfig_.basic.wifi.ssid && updatedConfig_.basic.wifi.password) {
+                submitForm()
+            } else {
+                alert("请选择一个wifi并填写密码")
+            }
+        }
+        //4. wifi开关状态不变【一直是关】，此时提交，需要弹框提示如“当前配置未修改”
+        else if (initialConfig.basic.wifi.enabled===false&&updatedConfig_.basic.wifi.enabled===false){
+            alert("当前配置未修改")
+        }
+        else{
+            alert("当前配置未修改")
+        }
+
 
     });
     // 点击高级配置提交按钮
