@@ -588,6 +588,7 @@ $(document).ready(function () {
         }else{
             defaultSsid=null
         }
+        console.log("wifi开关：",$('#wifi_enabled').is(':checked'))
         console.log("感应开关：",$('#distance_gauge_enabled').is(':checked'))
 
         var updatedConfig = {
@@ -595,7 +596,7 @@ $(document).ready(function () {
                 wifi: {
                     ssid: updatedConfig_.basic.wifi.ssid==null?defaultSsid!=undefined&&defaultSsid!=null?defaultSsid:"":updatedConfig_.basic.wifi.ssid,
                     password: updatedConfig_.basic.wifi.password || $('#wifi_password').val(),
-                    enabled: false,
+                    enabled: $('#wifi_enabled').is(':checked'),
                 }
             },
             advanced: {
@@ -608,7 +609,7 @@ $(document).ready(function () {
                 distance_gauge: {
                     set: parseInt($('#distance_gauge_set').val())||initialConfig.advanced.distance_gauge.set,
                     time: parseInt($('#distance_gauge_time').val()||initialConfig.advanced.distance_gauge.time),
-                    enabled: false
+                    enabled: $('#distance_gauge_enabled').is(':checked')
                 },
                 server: {
                     domain: $('#server_domain').val()||initialConfig.advanced.server.domain,
