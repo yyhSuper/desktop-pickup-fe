@@ -194,131 +194,7 @@ $(document).ready(function () {
             }
         }
     }
-    var initialConfig = {
-        "basic": {
-            "wifi": {
-                "ip": "192.168.0.124",
-                "mac": "50:41:1C:39:CD:AE",
-                "enabled": true,
-                "ssids": [
-                    {
-                        "ssid": "VIP888",
-                        "signal_level": "high",
-                        "signal_dbm": -32,
-                        "status": false
-                    },
-                    {
-                        "ssid": "huixia2.4G",
-                        "signal_level": "high",
-                        "signal_dbm": -31,
-                        "status": true
-                    },
-                    {
-                        "ssid": "huixia2.4G",
-                        "signal_level": "high",
-                        "signal_dbm": -36,
-                        "status": true
-                    },
-                    {
-                        "ssid": "ChinaNet-2NZk",
-                        "signal_level": "middle",
-                        "signal_dbm": -40,
-                        "status": true
-                    },
-                    {
-                        "ssid": "87003",
-                        "signal_level": "middle",
-                        "signal_dbm": -58,
-                        "status": true
-                    },
-                    {
-                        "ssid": "pj&zh",
-                        "signal_level": "low",
-                        "signal_dbm": -63,
-                        "status": true
-                    },
-                    {
-                        "ssid": "ChinaNet-Tpki",
-                        "signal_level": "low",
-                        "signal_dbm": -65,
-                        "status": true
-                    },
-                    {
-                        "ssid": "ChinaNet-Tpki",
-                        "signal_level": "low",
-                        "signal_dbm": -66,
-                        "status": true
-                    },
-                    {
-                        "ssid": "86002",
-                        "signal_level": "low",
-                        "signal_dbm": -68,
-                        "status": true
-                    },
-                    {
-                        "ssid": "ChinaNet-3591",
-                        "signal_level": "low",
-                        "signal_dbm": -70,
-                        "status": true
-                    },
-                    {
-                        "ssid": "87001",
-                        "signal_level": "low",
-                        "signal_dbm": -72,
-                        "status": true
-                    },
-                    {
-                        "ssid": "87005",
-                        "signal_level": "low",
-                        "signal_dbm": -73,
-                        "status": true
-                    },
-                    {
-                        "ssid": "86001",
-                        "signal_level": "low",
-                        "signal_dbm": -78,
-                        "status": true
-                    },
-                    {
-                        "ssid": "86003",
-                        "signal_level": "low",
-                        "signal_dbm": -78,
-                        "status": true
-                    },
-                    {
-                        "ssid": "HJGY-6",
-                        "signal_level": "low",
-                        "signal_dbm": -80,
-                        "status": true
-                    }
-                ]
-            }
-        },
-        "advanced": {
-            "mic": {
-                "staff_horizon": 30,
-                "staff_vertical": 30,
-                "customer_horizontal": 30,
-                "customer_vertical": 30
-            },
-            "distance_gauge": {
-                "max": 200,
-                "min": 1,
-                "time": 2,
-                "enabled": true,
-                "set": 150
-            },
-            "server": {
-                "domain": "36.139.39.189",
-                "ip": "36.139.39.189",
-                "port": 0
-            },
-            "wired": {
-                "ip": "0.0.0.0",
-                "mac": "0A:0C:11:22:33:44"
-            }
-        }
-    };
+    var initialConfig = {};
     $.ajax({
         url: base_url + "/config",
         type: "GET",
@@ -450,18 +326,27 @@ $(document).ready(function () {
         }
 
     });
+    $("#wifi_enabled").change(function () {
+        console.log("wifi_enabled",$(this).prop('checked'))
+        updatedConfig_.basic.wifi.enabled = $(this).prop('checked');
+    })
+    $("#distance_gauge_enabled").change(function () {
+        console.log("distance_gauge_enabled",$(this).prop('checked'))
+        updatedConfig_.advanced.distance_gauge.enabled = $(this).prop('checked');
+
+    })
 //download_Mp3
-$("#download_Mp3").click(function (event) {
-    console.log("开始下载window.location.href")
-    window.location.href='http://192.168.2.1/record/download'
+    $("#download_Mp3").click(function (event) {
+        console.log("开始下载window.location.href")
+        window.location.href='http://192.168.2.1/record/download'
 
 
-});
+    });
     //点击重启
     $('#restart').click(function () {
         var restart = confirm("确定重启设备吗？");
         if (restart) {
-        
+
             $.ajax({
                 url: base_url + "/restart",
                 type: "POST",
@@ -524,16 +409,16 @@ $("#download_Mp3").click(function (event) {
     });
     //distance_gauge_time 感应时间
     $("#distance_gauge_time").on('input', function (e) {
-    if(e.delegateTarget.value>60||e.delegateTarget.value<1){
-        if(e.delegateTarget.value!=""){
-            $("#distance_gauge_time_error").show()
-               // e.delegateTarget.value = "";
- }
+        if(e.delegateTarget.value>60||e.delegateTarget.value<1){
+            if(e.delegateTarget.value!=""){
+                $("#distance_gauge_time_error").show()
+                // e.delegateTarget.value = "";
+            }
 
-    }else{
-        $("#distance_gauge_time_error").hide()
-        updatedConfig_.advanced.distance_gauge.time = e.delegateTarget.value;
-       }
+        }else{
+            $("#distance_gauge_time_error").hide()
+            updatedConfig_.advanced.distance_gauge.time = e.delegateTarget.value;
+        }
     });
     var domainReg = /^(?:(?:[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,61}[a-zA-Z0-9])?\.)+(?:[a-zA-Z]{2,})|\[(?:[0-9a-fA-F]{1,4}:){7}[0-9a-fA-F]{1,4}|\[(?:[0-9a-fA-F]{1,4}:){1,7}:|[0-9a-fA-F]{1,4}:(:[0-9a-fA-F]{1,4}){1,6}])$/;
     var ipReg =  /^((25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){3}(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)$|^(([0-9a-fA-F]{1,4}:){7,7}[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,7}:|([0-9a-fA-F]{1,4}:){1,6}:[0-9a-fA-F]{1,4}|([0-9a-fA-F]{1,4}:){1,5}(:[0-9a-fA-F]{1,4}){1,2}|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,3}|([0-9a-fA-F]{1,4}:){1,3}(:[0-9a-fA-F]{1,4}){1,4}|([0-9a-fA-F]{1,4}:){1,2}(:[0-9a-fA-F]{1,4}){1,5}|[0-9a-fA-F]{1,4}:((:[0-9a-fA-F]{1,4}){1,6})|:((:[0-9a-fA-F]{1,4}){1,7}|:)|fe80:(:[0-9a-fA-F]{0,4}){0,4}%[0-9a-zA-Z]{1,}|::(ffff(:0{1,4}){0,1}:){0,1}((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])|([0-9a-fA-F]{1,4}:){1,4}(:[0-9a-fA-F]{1,4}){1,4}:((25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9])\.){3,3}(25[0-5]|(2[0-4]|1{0,1}[0-9]){0,1}[0-9]))$/;
@@ -601,38 +486,40 @@ $("#download_Mp3").click(function (event) {
     });
 
 //staff_horizon职员方向水平拾音角度
-$('#staff_horizon div').on('click', function () {
-    $(this).addClass('active').siblings().removeClass('active')
-    var angle = $(this).find('span').text();
-    console.log("当前点击的职员方向水平拾音角度", updatedConfig_);
-    updatedConfig_.advanced.mic.staff_horizon = parseInt(angle);
-});
+    $('#staff_horizon div').on('click', function () {
+        $(this).addClass('active').siblings().removeClass('active')
+        var angle = $(this).find('span').text();
+        console.log("当前点击的职员方向水平拾音角度", updatedConfig_);
+        updatedConfig_.advanced.mic.staff_horizon = parseInt(angle);
+    });
 //staff_vertical职员方向垂直拾音角度
-$('#staff_vertical div').on('click', function () {
-    $(this).addClass('active').siblings().removeClass('active')
-    var angle = $(this).find('span').text();
-    // console.log(angle)
-    console.log("当前点击的职员方向垂直拾音角度", updatedConfig_);
-    updatedConfig_.advanced.mic.staff_vertical = parseInt(angle);
-});
+    $('#staff_vertical div').on('click', function () {
+        $(this).addClass('active').siblings().removeClass('active')
+        var angle = $(this).find('span').text();
+        // console.log(angle)
+        console.log("当前点击的职员方向垂直拾音角度", updatedConfig_);
+        updatedConfig_.advanced.mic.staff_vertical = parseInt(angle);
+    });
 //customer_horizontal客户方向水平拾音角度
-$('#customer_horizontal div').on('click', function () {
-    $(this).addClass('active').siblings().removeClass('active')
-    var angle = $(this).find('span').text();
-    console.log("当前点击的客户方向水平拾音角度", updatedConfig_);
-    updatedConfig_.advanced.mic.customer_horizontal = parseInt(angle);
-});
+    $('#customer_horizontal div').on('click', function () {
+        $(this).addClass('active').siblings().removeClass('active')
+        var angle = $(this).find('span').text();
+        console.log("当前点击的客户方向水平拾音角度", updatedConfig_);
+        updatedConfig_.advanced.mic.customer_horizontal = parseInt(angle);
+    });
 //customer_vertical客户方向垂直拾音角度
-$('#customer_vertical div').on('click', function () {
-    $(this).addClass('active').siblings().removeClass('active')
-    var angle = $(this).find('span').text();
-    console.log("当前点击的客户方向垂直拾音角度", updatedConfig_);
-    updatedConfig_.advanced.mic.customer_vertical = parseInt(angle)
-})
+    $('#customer_vertical div').on('click', function () {
+        $(this).addClass('active').siblings().removeClass('active')
+        var angle = $(this).find('span').text();
+        console.log("当前点击的客户方向垂直拾音角度", updatedConfig_);
+        updatedConfig_.advanced.mic.customer_vertical = parseInt(angle)
+    })
 
 
     // 点击基础配置提交按钮
     $('#basic-submit').click(function () {
+        console.log(initialConfig)
+        console.log(updatedConfig_)
         console.log("当前点击的ssid", updatedConfig_.basic.wifi.ssid);
 
         if(initialConfig.basic.wifi.enabled===true&&updatedConfig_.basic.wifi.enabled===false){
@@ -692,26 +579,7 @@ $('#customer_vertical div').on('click', function () {
 
         return isValid;
     }
-    document.addEventListener('DOMContentLoaded', (event) => {
-        const wifi_enabled = document.getElementById('wifi_enabled');
-        const distance_gauge_enabled = document.getElementById('distance_gauge_enabled');
 
-        // 可选：监听开关状态改变事件
-        wifi_enabled.addEventListener('change', () => {
-            if (wifi_enabled.checked) {
-                console.log('Switch is ON');
-            } else {
-                console.log('Switch is OFF');
-            }
-        });
-        distance_gauge_enabled.addEventListener('change', () => {
-            if (distance_gauge_enabled.checked) {
-                console.log('Switch is ON');
-            } else {
-                console.log('Switch is OFF');
-            }
-        });
-    });
     //提交表单
     function submitForm() {
         var defaultSsid=initialConfig.basic.wifi.ssids.filter(ssid=>ssid.status===true)
@@ -727,7 +595,7 @@ $('#customer_vertical div').on('click', function () {
                 wifi: {
                     ssid: updatedConfig_.basic.wifi.ssid==null?defaultSsid!=undefined&&defaultSsid!=null?defaultSsid:"":updatedConfig_.basic.wifi.ssid,
                     password: updatedConfig_.basic.wifi.password || $('#wifi_password').val(),
-                    enabled: $('#wifi_enabled').is(':checked')
+                    enabled: false,
                 }
             },
             advanced: {
@@ -740,7 +608,7 @@ $('#customer_vertical div').on('click', function () {
                 distance_gauge: {
                     set: parseInt($('#distance_gauge_set').val())||initialConfig.advanced.distance_gauge.set,
                     time: parseInt($('#distance_gauge_time').val()||initialConfig.advanced.distance_gauge.time),
-                    enabled: $('#distance_gauge_enabled').is(':checked')
+                    enabled: false
                 },
                 server: {
                     domain: $('#server_domain').val()||initialConfig.advanced.server.domain,
