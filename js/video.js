@@ -12,7 +12,7 @@ const canvas2 = document.getElementById('audio-visualizer-2'); // 获取第二�
 const canvasCtx1 = canvas1.getContext('2d'); // 获取第一个画布的 2D 上下文
 const canvasCtx2 = canvas2.getContext('2d'); // 获取第二个画布的 2D 上下文
 let bufferAccumulator = []; // 定义一个数组来累积缓冲数据
-const bufferAccumulationLimit = 1000; // 定义缓冲累积的限制
+const bufferAccumulationLimit = 500; // 定义缓冲累积的限制
 let accumulationTimer; // 定义一个变量来存储累积计时器
 let reader; // 定义一个变量来存储读取器
 let controller; // 定义一个变量来存储控制器
