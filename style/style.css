@@ -87,9 +87,9 @@ header  .right-wrap span{
 
 
 .container {padding:0 16px 30px 16px;}
-.container .box-row {background:#fff;height: auto;border-radius: 8px 8px 8px 8px;padding:24px 16px ;margin-bottom:13px;}
-.container .main-content{display:none;}
-.container .box-row  .title{display:flex;flex-direction:row;justify-content: space-between;align-items: center;
+.container .box-row {background:#fff;height: auto;border-radius: 8px 8px 8px 8px;margin-bottom:13px;}
+.container .main-content{display:none;padding: 0px 16px 24px 16px;}
+.container .box-row  .title{display:flex;flex-direction:row;justify-content: space-between;align-items: center;padding: 24px 16px;
 cursor: pointer
 }
 .container .box-row  .title-header{font-size:16px;font-weight: bold;display: flex;justify-content: left;align-items: center;background: none;}
@@ -474,14 +474,23 @@ input:checked + .slider:before {
     border-radius: 50%;
     overflow: hidden;
 }
-    .input-box  .input-wrap{
+.input-box  .input-wrap{
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: center;
+
+
+}
+    .input-box  .input-wrap:not(:last-child){
         display: flex;
         flex-direction: row;
         justify-content: space-between;
         align-items: center;
-        margin-top: 30px;
+        margin-bottom: 30px;
 
     }
+
     .input-box  .input-wrap .label-text{
         font-weight: 400;
         font-size: 14px;

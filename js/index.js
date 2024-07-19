@@ -51,35 +51,35 @@ $(document).ready(function () {
         }
     }
     // 点击标题展开内容，并收缩其他内容
-    // $('.title').click(function () {
-    //     var index = $(this).index('.title');
-    //     var mainContent = $(".main-content").eq(index);
-    //
-    //     if ($(this).hasClass("active")) {
-    //         mainContent.slideUp();
-    //         $(this).removeClass("active");
-    //     } else {
-    //         $(".main-content").slideUp();
-    //         $(".title").removeClass("active");
-    //         mainContent.slideDown();
-    //         $(this).addClass("active");
-    //     }
-    // });
+    $('.title').click(function () {
+        var index = $(this).index('.title');
+        var mainContent = $(".main-content").eq(index);
 
-$(".box-row").click(function () {
-    var index = $(this).index(".box-row");
-    var mainContent = $(".main-content").eq(index);
+        if ($(this).hasClass("active")) {
+            mainContent.slideUp();
+            $(this).removeClass("active");
+        } else {
+            $(".main-content").slideUp();
+            $(".title").removeClass("active");
+            mainContent.slideDown();
+            $(this).addClass("active");
+        }
+    });
 
-    if ($(this).find('.title').hasClass("active")) {
-        $(".main-content").slideUp();
-        $(this).find('.title').removeClass("active");
-    } else {
-        $(".main-content").slideUp();
-        $(".title").removeClass("active");
-        $(this).find('.main-content').slideDown()
-        $(this).find('.title').addClass("active");
-    }
-});
+// $(".box-row").click(function () {
+//     var index = $(this).index(".box-row");
+//     var mainContent = $(".main-content").eq(index);
+//
+//     if ($(this).find('.title').hasClass("active")) {
+//         $(".main-content").slideUp();
+//         $(this).find('.title').removeClass("active");
+//     } else {
+//         $(".main-content").slideUp();
+//         $(".title").removeClass("active");
+//         $(this).find('.main-content').slideDown()
+//         $(this).find('.title').addClass("active");
+//     }
+// });
     // 使用测试配置
 
     var testJSON ={
