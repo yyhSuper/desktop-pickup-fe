@@ -64,6 +64,9 @@ header  .right-wrap #restart{
 
     justify-content: center;
     align-items: center;
+    background: #ff0000;
+    padding: 8px 15px;
+    border-radius: 10px;
 }
 header  .right-wrap img.restart{
     width: 16px;
@@ -72,9 +75,9 @@ header  .right-wrap img.restart{
 }
 header  .right-wrap span{
     font-weight: 500;
-    font-size: 12px;
+    font-size: 14px;
     margin-left: 4px;
-    color: #6A6A6A;
+    color: #fff;
     line-height: 16px;
     text-align: center;
     font-style: normal;

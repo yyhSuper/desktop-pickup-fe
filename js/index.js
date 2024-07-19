@@ -218,6 +218,9 @@ $(document).ready(function () {
     // 初始化表单
     function initializeForm(config) {
         console.log("初始化配置2",config)
+        // updatedConfig_=config
+        updatedConfig_.advanced=config.advanced
+        updatedConfig_.basic=config.basic
         // 初始化WiFi列表
         var wifiListContainer = $('#wifi-list');
         wifiListContainer.empty(); // 清空WiFi列表容器
@@ -395,24 +398,28 @@ $(document).ready(function () {
     })
     //distance_gauge_set 感应距离设置
     $("#distance_gauge_set").on('input', function (e) {
-        if(e.delegateTarget.value>200||e.delegateTarget.value<1){
-            if (e.delegateTarget.value!=""){
+        if(e.delegateTarget.value>150||e.delegateTarget.value<20){
+            if (e.delegateTarget.value!==""){
                 // e.delegateTarget.value = "";
                 $("#distance_gauge_set_error").show()
+                updatedConfig_.advanced.distance_gauge.set = e.delegateTarget.value;
+                console.log(updatedConfig_)
             }
 
         }else{
             $("#distance_gauge_set_error").hide()
             updatedConfig_.advanced.distance_gauge.set = e.delegateTarget.value;
             $("#distance_gauge_set_text").text(e.delegateTarget.value + "cm");
+            console.log(updatedConfig_)
         }
 
     });
     //distance_gauge_time 感应时间
     $("#distance_gauge_time").on('input', function (e) {
         if(e.delegateTarget.value>60||e.delegateTarget.value<1){
-            if(e.delegateTarget.value!=""){
+            if(e.delegateTarget.value!==""){
                 $("#distance_gauge_time_error").show()
+                updatedConfig_.advanced.distance_gauge.time = e.delegateTarget.value;
                 // e.delegateTarget.value = "";
             }
 
@@ -551,13 +558,29 @@ $(document).ready(function () {
     });
     // 点击高级配置提交按钮
     $('#advanced-submit').click(function () {
+        console.log(updatedConfig_)
         //判断服务器域名、IP、端口如果非空时是否符合正则
 
-        if (validateServerDetails(updatedConfig_.advanced.server.domain, updatedConfig_.advanced.server.ip, updatedConfig_.advanced.server.port)) {
+       /* if (validateServerDetails(updatedConfig_.advanced.server.domain, updatedConfig_.advanced.server.ip, updatedConfig_.advanced.server.port)) {
 
             submitForm()
         } else {
             alert("请检查服务器域名、IP、端口是否正确")
+        }*/
+        if(updatedConfig_.advanced.distance_gauge.set>19&&updatedConfig_.advanced.distance_gauge.set<151&&updatedConfig_.advanced.distance_gauge.set!==""&&updatedConfig_.advanced.distance_gauge.set!==null&&updatedConfig_.advanced.distance_gauge.time>0&&updatedConfig_.advanced.distance_gauge.time<61&&updatedConfig_.advanced.distance_gauge.time!==""&&updatedConfig_.advanced.distance_gauge.time!==null){
+            if (validateServerDetails( updatedConfig_.advanced.server.ip, updatedConfig_.advanced.server.port)) {
+
+                // submitForm()
+            } else {
+                alert("请检查服务器域名、IP、端口是否正确")
+            }
+        }else{
+            if(updatedConfig_.advanced.distance_gauge.set<20||updatedConfig_.advanced.distance_gauge.set>150){
+                alert("“提交失败，感应距离超出限制范围，请重新配置")
+            }
+            if(updatedConfig_.advanced.distance_gauge.time<1||updatedConfig_.advanced.distance_gauge.time>60){
+                alert("“提交失败，感应离开延迟时间超出限制范围，请重新配置")
+            }
         }
 
 
@@ -566,9 +589,9 @@ $(document).ready(function () {
     function validateServerDetails(serverDomain, serverIP, serverPort) {
         var isValid = true;
 
-        if (serverDomain) {
+       /* if (serverDomain) {
             isValid &= domainReg.test(serverDomain);
-        }
+        }*/
 
         if (serverIP) {
             isValid &= ipReg.test(serverIP);
