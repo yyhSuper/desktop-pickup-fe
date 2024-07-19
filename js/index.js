@@ -583,9 +583,9 @@ $(document).ready(function () {
         if(updatedConfig_.advanced.distance_gauge.set>19&&updatedConfig_.advanced.distance_gauge.set<151&&updatedConfig_.advanced.distance_gauge.set!==""&&updatedConfig_.advanced.distance_gauge.set!==null&&updatedConfig_.advanced.distance_gauge.time>0&&updatedConfig_.advanced.distance_gauge.time<61&&updatedConfig_.advanced.distance_gauge.time!==""&&updatedConfig_.advanced.distance_gauge.time!==null){
             if (validateServerDetails( updatedConfig_.advanced.server.ip, updatedConfig_.advanced.server.port)) {
 
-                // submitForm()
+                submitForm()
             } else {
-                alert("请检查服务器域名、IP、端口是否正确")
+                alert("请检查服务器IP、端口是否正确")
             }
         }else{
             if(updatedConfig_.advanced.distance_gauge.set<20||updatedConfig_.advanced.distance_gauge.set>150){
@@ -599,7 +599,7 @@ $(document).ready(function () {
 
 
     });
-    function validateServerDetails(serverDomain, serverIP, serverPort) {
+    function validateServerDetails( serverIP, serverPort) {
         var isValid = true;
 
        /* if (serverDomain) {
