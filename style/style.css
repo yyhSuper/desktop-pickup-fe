@@ -259,8 +259,8 @@ font-size:12px;
     margin-right: 16px;
 }
 .input-box .input-row .status{flex-direction:row;display: flex;
-    width:80px;
-    justify-content: center;
+    width:100px;
+    justify-content: right;
     min-height: 24px;
     align-items: center;}
 .input-box .input-row .status img{width:24px;height:24px;}

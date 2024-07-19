@@ -92,79 +92,79 @@ $(document).ready(function () {
                         "ssid": "huixia2.4G",
                         "signal_level": "high",
                         "signal_dbm": -36,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "ChinaNet-2NZk",
                         "signal_level": "middle",
                         "signal_dbm": -40,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "87003",
                         "signal_level": "middle",
                         "signal_dbm": -58,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "pj&zh",
                         "signal_level": "low",
                         "signal_dbm": -63,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "ChinaNet-Tpki",
                         "signal_level": "low",
                         "signal_dbm": -65,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "ChinaNet-Tpki",
                         "signal_level": "low",
                         "signal_dbm": -66,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "86002",
                         "signal_level": "low",
                         "signal_dbm": -68,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "ChinaNet-3591",
                         "signal_level": "low",
                         "signal_dbm": -70,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "87001",
                         "signal_level": "low",
                         "signal_dbm": -72,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "87005",
                         "signal_level": "low",
                         "signal_dbm": -73,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "86001",
                         "signal_level": "low",
                         "signal_dbm": -78,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "86003",
                         "signal_level": "low",
                         "signal_dbm": -78,
-                        "status": true
+                        "status": false
                     },
                     {
                         "ssid": "HJGY-6",
                         "signal_level": "low",
                         "signal_dbm": -80,
-                        "status": true
+                        "status": false
                     }
                 ]
             }
@@ -210,9 +210,9 @@ $(document).ready(function () {
 
         }
     });
-    // initialConfig=testJSON
-    // console.log("初始化配置",initialConfig)
-    // initializeForm(initialConfig);
+    initialConfig=testJSON
+    console.log("初始化配置",initialConfig)
+    initializeForm(initialConfig);
 
 
     // 初始化表单
@@ -236,33 +236,34 @@ $(document).ready(function () {
             var isHasChecked = $(this).find('.status').has('.checked').length > 0;
 
             var select_img = " <img src=\"img/selected.png\" alt=\"\">"
+            var hasChecked = '<div class="checked"><span>已连接</span></div>'
             //判断.status是否包含div.checked ,如果包含则删除，如果不包含则添加select_img,并且把把其他非连接的div.status删除
             console.log("当前点击的wifi", isHasChecked);
 
-
-
             if (isHasChecked) {
-
-                // $(this).find('.status').remove('.checked');
-                // $(this).find('.status').html(select_img);
-            } else {
-                //如果其他div.status不包含.checked,则删除
-
                 $('.status').each(function () {
-                    if (!$(this).has('.checked').length > 0) {
+                    if ($(this).has('.checked').length > 0) {
+                        $(this).html(select_img+hasChecked);
+                    }else{
                         $(this).html('');
                     }
                 });
 
+            } else {
+                $('.status').each(function () {
+                    if (!$(this).has('.checked').length > 0) {
+                        $(this).html('');
+                    }else{
+                        $(this).html(hasChecked);
+                    }
+                });
                 $(this).find('.status').html(select_img);
-                //获取当前点击的ssid
-                var ssid = $(this).find('.wifi-name').text();
-                updatedConfig_.basic.wifi.ssid = ssid;
-                console.log("当前点击的ssid", updatedConfig_);
-
-
             }
 
+            //获取当前点击的ssid
+            var ssid = $(this).find('.wifi-name').text();
+            updatedConfig_.basic.wifi.ssid = ssid;
+            console.log("当前点击的ssid", updatedConfig_);
 
 
 
