@@ -205,164 +205,168 @@
             <h1>高级配置</h1>
 
         </div>
-        <div class="button_submitReset">
-        <div class="button-wrap">
-            <button class="reset" id="advanced-reset">重置</button>
-            <button class="submit" id="advanced-submit">提交</button>
-        </div>
-        </div>
-        <div class="box-row">
-            <div class="title">
-                <h3 class="title-header">麦克风配置</h3>
-                <div class="title-right"><div class="arr"></div></div>
-            </div>
-            <div class="main-content">
-                <h2 class="title-label">水平拾音角度</h2>
-                <div class="input-box">
-                    <div class="slider-box" id="staff_horizon">
-                        <div><span>30°</span></div>
-                        <div><span>45°</span></div>
-                        <div><span>60°</span></div>
-                        <div><span>90°</span></div>
-                        <div><span>120°</span></div>
-                    </div>
+        <form id="myForm">
+            <div class="button_submitReset">
 
+                <div class="button-wrap">
+                    <button class="reset" id="advanced-reset">重置</button>
+                    <button class="submit" id="advanced-submit">提交</button>
                 </div>
-                <h2 class="title-label">竖直拾音角度</h2>
-                <div class="input-box" >
-                    <div class="slider-box" id="staff_vertical">
-                        <div><span>30°</span></div>
-                        <div><span>45°</span></div>
-                        <div><span>60°</span></div>
-                        <div><span>90°</span></div>
-                        <div><span>120°</span></div>
-                    </div>
+             </div>
 
+            <div class="box-row">
+                <div class="title">
+                    <h3 class="title-header">麦克风配置</h3>
+                    <div class="title-right"><div class="arr"></div></div>
                 </div>
-                <!--<h2 class="title-label">客户方向水平拾音角度</h2>
-                <div class="input-box">
-                    <div class="slider" id="customer_horizontal">
-                        <div><span>30°</span></div>
-                        <div><span>45°</span></div>
-                        <div><span>60°</span></div>
-                        <div><span>90°</span></div>
-                        <div><span>120°</span></div>
-                    </div>
+                <div class="main-content">
+                    <h2 class="title-label">水平拾音角度</h2>
+                    <div class="input-box">
+                        <div class="slider-box" id="staff_horizon">
+                            <div><span>30°</span></div>
+                            <div><span>45°</span></div>
+                            <div><span>60°</span></div>
+                            <div><span>90°</span></div>
+                            <div><span>120°</span></div>
+                        </div>
 
+                    </div>
+                    <h2 class="title-label">竖直拾音角度</h2>
+                    <div class="input-box" >
+                        <div class="slider-box" id="staff_vertical">
+                            <div><span>30°</span></div>
+                            <div><span>45°</span></div>
+                            <div><span>60°</span></div>
+                            <div><span>90°</span></div>
+                            <div><span>120°</span></div>
+                        </div>
+
+                    </div>
+                    <!--<h2 class="title-label">客户方向水平拾音角度</h2>
+                    <div class="input-box">
+                        <div class="slider" id="customer_horizontal">
+                            <div><span>30°</span></div>
+                            <div><span>45°</span></div>
+                            <div><span>60°</span></div>
+                            <div><span>90°</span></div>
+                            <div><span>120°</span></div>
+                        </div>
+
+                    </div>
+                    <h2 class="title-label">客户方向竖直拾音角度</h2>
+                    <div class="input-box">
+                        <div class="slider" id="customer_vertical">
+                            <div><span>30°</span></div>
+                            <div><span>45°</span></div>
+                            <div><span>60°</span></div>
+                            <div><span>90°</span></div>
+                            <div><span>120°</span></div>
+                        </div>
+
+                    </div>-->
                 </div>
-                <h2 class="title-label">客户方向竖直拾音角度</h2>
-                <div class="input-box">
-                    <div class="slider" id="customer_vertical">
-                        <div><span>30°</span></div>
-                        <div><span>45°</span></div>
-                        <div><span>60°</span></div>
-                        <div><span>90°</span></div>
-                        <div><span>120°</span></div>
-                    </div>
 
-                </div>-->
+
             </div>
-
-
-        </div>
-        <div class="box-row">
-            <div class="title">
-                <h3 class="title-header">感应距离配置</h3>
-                <div class="title-right"><div class="arr"></div></div>
-            </div>
-            <div class="main-content">
-                <div class="input-box">
-                    <div class="input-wrap">
-                        <div class="label-text">感应距离（cm）</div>
-                        <div class="input">
-                            <input type="number" id="distance_gauge_set" placeholder="请输入20~150的值">
-                            <!--                        <span class="tips">请输入1~200的值</span>-->
-                            <span class="errorTips" id="distance_gauge_set_error">超出限制 20~150</span>
+            <div class="box-row">
+                <div class="title">
+                    <h3 class="title-header">感应距离配置</h3>
+                    <div class="title-right"><div class="arr"></div></div>
+                </div>
+                <div class="main-content">
+                    <div class="input-box">
+                        <div class="input-wrap">
+                            <div class="label-text">感应距离（cm）</div>
+                            <div class="input">
+                                <input type="number" id="distance_gauge_set" placeholder="请输入20~150的值">
+                                <!--                        <span class="tips">请输入1~200的值</span>-->
+                                <span class="errorTips" id="distance_gauge_set_error">超出限制 20~150</span>
+                            </div>
+                        </div>
+                        <div class="input-wrap">
+                            <div class="label-text">感应离开延迟时间（秒）</div>
+                            <div class="input">
+                                <input type="number" id="distance_gauge_time" placeholder="请输入1~60的值">
+                                <!--                        <span class="tips">请输入1~60的值</span>-->
+                                <span class="errorTips" id="distance_gauge_time_error">超出限制 1~60</span>
+                            </div>
+                        </div>
+                        <div class="input-wrap">
+                            <div class="label-text">感应开关(ToF)</div>
+                            <div class="">
+                                <div class="button-right">
+    <!--                                <label><input class="mui-switch" type="checkbox" id="distance_gauge_enabled"> </label>-->
+                                    <label class="switch">
+                                        <input type="checkbox" id="distance_gauge_enabled">
+                                        <span class="slider"></span>
+                                    </label>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                    <div class="input-wrap">
-                        <div class="label-text">感应离开延迟时间（秒）</div>
-                        <div class="input">
-                            <input type="number" id="distance_gauge_time" placeholder="请输入1~60的值">
-                            <!--                        <span class="tips">请输入1~60的值</span>-->
-                            <span class="errorTips" id="distance_gauge_time_error">超出限制 1~60</span>
+                </div>
+
+
+
+            </div>
+            <div class="box-row">
+                <div class="title">
+                    <h3 class="title-header">服务器配置</h3>
+                    <div class="title-right"><div class="arr"></div></div>
+                </div>
+                <div class="main-content">
+                    <div class="input-box">
+                      <!--  <div class="input-wrap">
+                            <div class="label-text">网络管理平台域名</div>
+                            <div class="input">
+                                <input type="text" id="server_domain">
+                                <span class="errorTips" id="server_domain_error">输入不符合格式</span>
+                            </div>
+                        </div>-->
+                        <div class="input-wrap">
+                            <div class="label-text">网络管理平台IP</div>
+                            <div class="input">
+                                <input type="text" id="server_ip">
+                                <span class="errorTips" id="server_ip_error">输入不符合格式</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="label-text">感应开关(ToF)</div>
-                        <div class="">
-                            <div class="button-right">
-<!--                                <label><input class="mui-switch" type="checkbox" id="distance_gauge_enabled"> </label>-->
-                                <label class="switch">
-                                    <input type="checkbox" id="distance_gauge_enabled">
-                                    <span class="slider"></span>
-                                </label>
+                        <div class="input-wrap">
+                            <div class="label-text">网络管理平台端口</div>
+                            <div class="input">
+                                <input type="text" id="server_port">
+                                <span class="errorTips" id="server_port_error">输入不符合格式</span>
                             </div>
                         </div>
                     </div>
                 </div>
             </div>
-
-
-
-        </div>
-        <div class="box-row">
-            <div class="title">
-                <h3 class="title-header">服务器配置</h3>
-                <div class="title-right"><div class="arr"></div></div>
-            </div>
-            <div class="main-content">
-                <div class="input-box">
-                  <!--  <div class="input-wrap">
-                        <div class="label-text">网络管理平台域名</div>
-                        <div class="input">
-                            <input type="text" id="server_domain">
-                            <span class="errorTips" id="server_domain_error">输入不符合格式</span>
+            <div class="box-row">
+                <div class="title">
+                    <h3 class="title-header">有线网络配置</h3>
+                    <div class="title-right"><div class="arr"></div></div>
+                </div>
+                <div class="main-content">
+                    <div class="input-box">
+                        <div class="input-wrap">
+                            <div class="label-text">有线网络MAC地址</div>
+                            <div class="input">
+                                <input type="text" id="wired_mac" readonly>
+                                <span class="errorTips no_connect" id="wired_mac_error" >输入不符合格式</span>
+                            </div>
                         </div>
-                    </div>-->
-                    <div class="input-wrap">
-                        <div class="label-text">网络管理平台IP</div>
-                        <div class="input">
-                            <input type="text" id="server_ip">
-                            <span class="errorTips" id="server_ip_error">输入不符合格式</span>
+                        <div class="input-wrap">
+                            <div class="label-text">有线网络IP地址</div>
+                            <div class="input">
+                                <input type="text" id="wired_ip" readonly>
+                                <span class="errorTips no_connect" id="wired_ip_error">输入不符合格式</span>
+                            </div>
                         </div>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="label-text">网络管理平台端口</div>
-                        <div class="input">
-                            <input type="text" id="server_port">
-                            <span class="errorTips" id="server_port_error">输入不符合格式</span>
-                        </div>
+
                     </div>
                 </div>
-            </div>
-        </div>
-        <div class="box-row">
-            <div class="title">
-                <h3 class="title-header">有线网络配置</h3>
-                <div class="title-right"><div class="arr"></div></div>
-            </div>
-            <div class="main-content">
-                <div class="input-box">
-                    <div class="input-wrap">
-                        <div class="label-text">有线网络MAC地址</div>
-                        <div class="input">
-                            <input type="text" id="wired_mac" readonly>
-                            <span class="errorTips no_connect" id="wired_mac_error" >输入不符合格式</span>
-                        </div>
-                    </div>
-                    <div class="input-wrap">
-                        <div class="label-text">有线网络IP地址</div>
-                        <div class="input">
-                            <input type="text" id="wired_ip" readonly>
-                            <span class="errorTips no_connect" id="wired_ip_error">输入不符合格式</span>
-                        </div>
-                    </div>
 
-                </div>
             </div>
-
-        </div>
+        </form>
         
     </div>
 

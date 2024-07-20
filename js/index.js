@@ -8,7 +8,7 @@ $(document).ready(function () {
     }
 
     // 监听系统的配色方案变化
-    window.matchMedia('(prefers-color-scheme: dark)').addListener(e => {
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', (e) => {
         if (e.matches) {
             body.classList.add('dark-mode');
             alert("Dark mode enabled");
@@ -19,7 +19,7 @@ $(document).ready(function () {
     });
     var audio_download_url = "";
     //待更新config
-    var updatedConfig_ = {
+    let updatedConfig_ = {
         basic: {
             wifi: {
                 ssid: "",
@@ -82,7 +82,7 @@ $(document).ready(function () {
 // });
     // 使用测试配置
 
-    var testJSON ={
+    let testJSON ={
         "basic": {
             "wifi": {
                 "ip": "192.168.0.124",
@@ -207,33 +207,35 @@ $(document).ready(function () {
             }
         }
     }
-    var initialConfig = {};
+    let initialConfig = {};
     $.ajax({
         url: base_url + "/config",
         type: "GET",
         contentType: "application/json",
         success: function (response) {
             console.log("获取配置成功",response)
-            initialConfig=response
+            initialConfig = JSON.parse(JSON.stringify(response)); // 深拷贝
+            updatedConfig_ = JSON.parse(JSON.stringify(initialConfig)); // 深拷贝
             console.log("初始化配置", response);
-            initializeForm(initialConfig);
+            initializeForm(updatedConfig_);
         },
         error: function (err) {
             console.error("获取配置失败", err);
 
         }
     });
-    // initialConfig=testJSON
-    // console.log("初始化配置",initialConfig)
-    // initializeForm(initialConfig);
+    initialConfig = JSON.parse(JSON.stringify(testJSON)); // 深拷贝
+    updatedConfig_ = JSON.parse(JSON.stringify(initialConfig)); // 深拷贝
+    console.log("初始配置initialConfig", initialConfig)
+    initializeForm(updatedConfig_);
 
 
     // 初始化表单
     function initializeForm(config) {
-        console.log("初始化配置2",config)
+        console.log("初始化配置",config)
         // updatedConfig_=config
-        updatedConfig_.advanced=config.advanced
-        updatedConfig_.basic=config.basic
+        updatedConfig_.advanced = JSON.parse(JSON.stringify(config.advanced)); // 深拷贝
+        updatedConfig_.basic = JSON.parse(JSON.stringify(config.basic)); // 深拷贝
         // 初始化WiFi列表
         var wifiListContainer = $('#wifi-list');
         wifiListContainer.empty(); // 清空WiFi列表容器
@@ -337,9 +339,10 @@ $(document).ready(function () {
     $('#basic-reset, #advanced-reset').click(function () {
         //确认弹窗
         if (confirm("是否要重置当前配置？")) {
-
+            // updatedConfig_=initialConfig
+            document.getElementById('myForm').reset();
             // 重置配置
-            initializeForm(initialConfig);
+            // initializeForm(updatedConfig_);
         }
 
     });
@@ -511,6 +514,7 @@ $(document).ready(function () {
         $(this).addClass('active').siblings().removeClass('active')
         var angle = $(this).find('span').text();
         console.log("当前点击的职员方向水平拾音角度", updatedConfig_);
+        console.log("初始配置", initialConfig);
         updatedConfig_.advanced.mic.staff_horizon = parseInt(angle);
     });
 //staff_vertical职员方向垂直拾音角度
@@ -519,6 +523,7 @@ $(document).ready(function () {
         var angle = $(this).find('span').text();
         // console.log(angle)
         console.log("当前点击的职员方向垂直拾音角度", updatedConfig_);
+        console.log("初始配置", initialConfig);
         updatedConfig_.advanced.mic.staff_vertical = parseInt(angle);
     });
 //customer_horizontal客户方向水平拾音角度
@@ -699,6 +704,7 @@ $(document).ready(function () {
 
     // 设置麦克风角度函数
     function setMicAngles(micConfig) {
+        console.log('设置麦克风角度',micConfig)
         $('#staff_horizon div, #staff_vertical div, #customer_horizontal div, #customer_vertical div').removeClass('active');
 
         $('#staff_horizon div').each(function () {
@@ -730,228 +736,7 @@ $(document).ready(function () {
         });
     }
 
-    /*let timerInterval;
-    let seconds = 0;
-    let audioPlayer;
-    const canvas1 = document.getElementById('audio-visualizer-1');
-    const canvas2 = document.getElementById('audio-visualizer-2');
-    const canvasCtx1 = canvas1.getContext('2d');
-    const canvasCtx2 = canvas2.getContext('2d');
-    let audioContext;
-    let analyserLeft, analyserRight;
-    let bufferLength;
-    let dataArrayLeft, dataArrayRight;
-    let sourceNode;
-    let audioContextInitialized = false;
 
-    initAudioContext();
-
-    $('#start').click(function() {
-        $(this).hide();
-        $('#stop').show();
-        $('#record-time').show();
-        if (audioContextInitialized) {
-            startRecording();
-        } else {
-            console.error('audioContext 尚未初始化，请稍后再试。');
-        }
-    });
-
-    $('#stop').click(function() {
-        $(this).hide();
-        $('#start').show();
-        $('#record-time').hide();
-        stopRecording();
-    });
-
-    function initAudioContext() {
-        try {
-            audioContext = new (window.AudioContext || window.webkitAudioContext)();
-            audioContextInitialized = true;
-            console.log('AudioContext 初始化成功');
-        } catch (e) {
-            console.error('无法创建 AudioContext:', e);
-        }
-    }
-
-    function startTimer() {
-        seconds = 0;
-        updateTimerDisplay(seconds);
-        clearInterval(timerInterval);
-        timerInterval = setInterval(function() {
-            seconds++;
-            updateTimerDisplay(seconds);
-        }, 1000);
-        console.log('计时器开始');
-    }
-
-    function stopTimer() {
-        clearInterval(timerInterval);
-        console.log('计时器停止');
-    }
-
-    function updateTimerDisplay(seconds) {
-        let minutes = Math.floor(seconds / 60);
-        let remainingSeconds = seconds % 60;
-        let formattedTime = (minutes < 10 ? '0' : '') + minutes + ':' + (remainingSeconds < 10 ? '0' : '') + remainingSeconds;
-        $('#record-time-text').text(formattedTime);
-    }
-
-    function startRecording() {
-        $('#error').text('');
-        stopRecording(); // 停止上次录音并清理资源
-
-        // 创建新的 HTMLMediaElement 对象
-        audioPlayer = document.createElement('audio');
-        audioPlayer.id = 'player';
-        document.body.appendChild(audioPlayer);
-
-        console.log('开始获取音频流...');
-        fetch('http://192.168.2.1/record/stream')
-            .then(response => {
-                if (response.ok) {
-                    return response.arrayBuffer();
-                } else {
-                    throw new Error(`错误: ${response.status} ${response.statusText}`);
-                }
-            })
-            .then(arrayBuffer => {
-                console.log('音频流获取成功，开始解码...');
-                return audioContext.decodeAudioData(arrayBuffer);
-            })
-            .then(decodedData => {
-                console.log('音频流解码成功');
-                playDecodedAudio(decodedData);
-            })
-            .catch(error => {
-                console.error('获取音频流错误:', error);
-                $('#error').text(error.message);
-                stopRecording();
-            });
-
-        analyserLeft = audioContext.createAnalyser();
-        analyserRight = audioContext.createAnalyser();
-        analyserLeft.fftSize = 2048;
-        analyserRight.fftSize = 2048;
-        bufferLength = analyserLeft.frequencyBinCount;
-        dataArrayLeft = new Uint8Array(bufferLength);
-        dataArrayRight = new Uint8Array(bufferLength);
-
-        startTimer();
-        draw();
-    }
-
-    function playDecodedAudio(decodedData) {
-        const splitter = audioContext.createChannelSplitter(2);
-        const merger = audioContext.createChannelMerger(2);
-
-        sourceNode = audioContext.createBufferSource();
-        sourceNode.buffer = decodedData;
-
-        sourceNode.connect(splitter);
-        splitter.connect(analyserLeft, 0);
-        splitter.connect(analyserRight, 1);
-
-        analyserLeft.connect(audioContext.destination);
-        analyserRight.connect(audioContext.destination);
-
-        sourceNode.start(0);
-
-        audioPlayer.play().then(() => {
-            console.log('音频播放已开始');
-        }).catch(error => {
-            console.error('音频播放错误:', error);
-        });
-    }
-
-    function stopRecording() {
-        if (audioPlayer) {
-            audioPlayer.pause(); // 先暂停播放
-            audioPlayer.currentTime = 0; // 重置播放时间
-            if (audioPlayer.src) {
-                URL.revokeObjectURL(audioPlayer.src);
-                audioPlayer.src = ''; // 停止音频播放并释放资源
-            }
-            if (audioPlayer.parentNode) {
-                audioPlayer.parentNode.removeChild(audioPlayer);
-            }
-            audioPlayer = null;
-        }
-        stopTimer();
-        cleanupAudioNodes();
-    }
-
-    function cleanupAudioNodes() {
-        if (sourceNode) {
-            sourceNode.disconnect();
-            console.log('SourceNode 断开连接');
-            sourceNode = null;
-        }
-        if (analyserLeft) {
-            analyserLeft.disconnect();
-            console.log('AnalyserLeft 断开连接');
-            analyserLeft = null;
-        }
-        if (analyserRight) {
-            analyserRight.disconnect();
-            console.log('AnalyserRight 断开连接');
-            analyserRight = null;
-        }
-    }
-
-    function draw() {
-        if (!analyserLeft || !analyserRight) return;
-
-        requestAnimationFrame(draw);
-
-        analyserLeft.getByteTimeDomainData(dataArrayLeft);
-        analyserRight.getByteTimeDomainData(dataArrayRight);
-
-        canvasCtx1.fillStyle = 'rgb(240, 240, 240)';
-        canvasCtx1.fillRect(0, 0, canvas1.width, canvas1.height);
-
-        canvasCtx2.fillStyle = 'rgb(240, 240, 240)';
-        canvasCtx2.fillRect(0, 0, canvas2.width, canvas2.height);
-
-        canvasCtx1.lineWidth = 2;
-        canvasCtx1.strokeStyle = '#32CD32'; // 绿色
-        canvasCtx2.lineWidth = 2;
-        canvasCtx2.strokeStyle = '#4169E1'; // 蓝色
-
-        canvasCtx1.beginPath();
-        canvasCtx2.beginPath();
-
-        const sliceWidth1 = canvas1.width * 1.0 / bufferLength;
-        const sliceWidth2 = canvas2.width * 1.0 / bufferLength;
-        let x1 = 0;
-        let x2 = 0;
-
-        for (let i = 0; i < bufferLength; i++) {
-            const vLeft = dataArrayLeft[i] / 128.0; // 转换为范围在 [0, 1] 的值
-            const yLeft = vLeft * canvas1.height / 2;
-
-            const vRight = dataArrayRight[i] / 128.0;
-            const yRight = vRight * canvas2.height / 2;
-
-            if (i === 0) {
-                canvasCtx1.moveTo(x1, yLeft);
-                canvasCtx2.moveTo(x2, yRight);
-            } else {
-                canvasCtx1.lineTo(x1, yLeft);
-                canvasCtx2.lineTo(x2, yRight);
-            }
-
-            x1 += sliceWidth1;
-            x2 += sliceWidth2;
-        }
-
-        canvasCtx1.lineTo(canvas1.width, canvas1.height / 2);
-        canvasCtx1.stroke();
-
-        canvasCtx2.lineTo(canvas2.width, canvas2.height / 2);
-        canvasCtx2.stroke();
-    }
-*/
 
 
 
