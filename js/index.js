@@ -224,11 +224,11 @@ $(document).ready(function () {
 
         }
     });
-    initialConfig = JSON.parse(JSON.stringify(testJSON)); // 深拷贝
+  /*  initialConfig = JSON.parse(JSON.stringify(testJSON)); // 深拷贝
     updatedConfig_ = JSON.parse(JSON.stringify(initialConfig)); // 深拷贝
     console.log("初始配置initialConfig", initialConfig)
     initializeForm(updatedConfig_);
-
+*/
 
     // 初始化表单
     function initializeForm(config) {
