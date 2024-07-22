@@ -224,10 +224,10 @@ $(document).ready(function () {
 
         }
     });
-    initialConfig = JSON.parse(JSON.stringify(testJSON)); // 深拷贝
+  /*  initialConfig = JSON.parse(JSON.stringify(testJSON)); // 深拷贝
     updatedConfig_ = JSON.parse(JSON.stringify(initialConfig)); // 深拷贝
     console.log("初始配置initialConfig", initialConfig)
-    initializeForm(updatedConfig_);
+    initializeForm(updatedConfig_);*/
 
 
     // 初始化表单
@@ -336,16 +336,11 @@ $(document).ready(function () {
     }
 
     // 点击重置按钮时，重新加载初始配置
-    $('#basic-reset, #advanced-reset').click(function () {
-        //确认弹窗
-        if (confirm("是否要重置当前配置？")) {
-            // updatedConfig_=initialConfig
-            document.getElementById('myForm').reset();
-            // 重置配置
-            // initializeForm(updatedConfig_);
-        }
-
-    });
+    $('#advanced-reset').click(function(){
+        //重新初始化
+        console.log("初始化配置",initialConfig)
+        initializeForm(initialConfig);
+    })
     $("#wifi_enabled").change(function () {
         console.log("wifi_enabled",$(this).prop('checked'))
         updatedConfig_.basic.wifi.enabled = $(this).prop('checked');
