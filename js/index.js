@@ -543,22 +543,25 @@ $(document).ready(function () {
 
 
     // 点击基础配置提交按钮
-    $('#basic-submit').click(function () {
+    $('#basicForm').on('submit', function(event) {
         console.log(initialConfig)
         console.log(updatedConfig_)
         console.log("当前点击的ssid", updatedConfig_.basic.wifi.ssid);
 
         if(initialConfig.basic.wifi.enabled===true&&updatedConfig_.basic.wifi.enabled===false){
             //1.wifi开关从 开--->关， 可以提交配置，不需要校验是否选中wifi，输入密码
+            event.preventDefault();
             submitForm()
         }
         else if(initialConfig.basic.wifi.enabled===false&&updatedConfig_.basic.wifi.enabled===true){
             // 2. wifi开关从 关-开 ， 可以提交配置，不需要校验是否选中wifi，输入密码
+            event.preventDefault();
             submitForm()
         }
         else if(initialConfig.basic.wifi.enabled===true&&updatedConfig_.basic.wifi.enabled===true){
             //3. wifi开关状态不变【一直是开】，此时提交，需要判断是否选中wifi，是否输入密码
             if (updatedConfig_.basic.wifi.ssid && updatedConfig_.basic.wifi.password) {
+                event.preventDefault();
                 submitForm()
             } else {
                 alert("请选择一个wifi并填写密码")
@@ -575,7 +578,7 @@ $(document).ready(function () {
 
     });
     // 点击高级配置提交按钮
-    $('#advanced-submit').click(function () {
+    $('#myForm').on('submit', function(event) {
         console.log(updatedConfig_)
         //判断服务器域名、IP、端口如果非空时是否符合正则
 
@@ -587,7 +590,7 @@ $(document).ready(function () {
         }*/
         if(updatedConfig_.advanced.distance_gauge.set>19&&updatedConfig_.advanced.distance_gauge.set<151&&updatedConfig_.advanced.distance_gauge.set!==""&&updatedConfig_.advanced.distance_gauge.set!==null&&updatedConfig_.advanced.distance_gauge.time>0&&updatedConfig_.advanced.distance_gauge.time<61&&updatedConfig_.advanced.distance_gauge.time!==""&&updatedConfig_.advanced.distance_gauge.time!==null){
             if (validateServerDetails( updatedConfig_.advanced.server.ip, updatedConfig_.advanced.server.port)) {
-
+                event.preventDefault();
                 submitForm()
             } else {
                 alert("请检查服务器IP、端口是否正确")
