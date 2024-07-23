@@ -224,11 +224,11 @@ $(document).ready(function () {
 
         }
     });
-  /*  initialConfig = JSON.parse(JSON.stringify(testJSON)); // 深拷贝
+/*    initialConfig = JSON.parse(JSON.stringify(testJSON)); // 深拷贝
     updatedConfig_ = JSON.parse(JSON.stringify(initialConfig)); // 深拷贝
     console.log("初始配置initialConfig", initialConfig)
-    initializeForm(updatedConfig_);
-*/
+    initializeForm(updatedConfig_);*/
+
 
     // 初始化表单
     function initializeForm(config) {
@@ -336,10 +336,14 @@ $(document).ready(function () {
     }
 
     // 点击重置按钮时，重新加载初始配置
-    $('#advanced-reset').click(function(){
+    $('#advanced-reset').click(function(e){
         //重新初始化
+        e.preventDefault();
         console.log("初始化配置",initialConfig)
         initializeForm(initialConfig);
+        $('.errorTips').hide()
+        alert('重置配置成功')
+
     })
     $("#wifi_enabled").change(function () {
         console.log("wifi_enabled",$(this).prop('checked'))
@@ -559,14 +563,17 @@ $(document).ready(function () {
                 event.preventDefault();
                 submitForm()
             } else {
+                event.preventDefault();
                 alert("请选择一个wifi并填写密码")
             }
         }
         //4. wifi开关状态不变【一直是关】，此时提交，需要弹框提示如“当前配置未修改”
         else if (initialConfig.basic.wifi.enabled===false&&updatedConfig_.basic.wifi.enabled===false){
+            event.preventDefault();
             alert("当前配置未修改")
         }
         else{
+            event.preventDefault();
             alert("当前配置未修改")
         }
 
@@ -588,13 +595,16 @@ $(document).ready(function () {
                 event.preventDefault();
                 submitForm()
             } else {
+                event.preventDefault();
                 alert("请检查服务器IP、端口是否正确")
             }
         }else{
             if(updatedConfig_.advanced.distance_gauge.set<20||updatedConfig_.advanced.distance_gauge.set>150){
+                event.preventDefault();
                 alert("“提交失败，感应距离超出限制范围，请重新配置")
             }
             if(updatedConfig_.advanced.distance_gauge.time<1||updatedConfig_.advanced.distance_gauge.time>60){
+                event.preventDefault();
                 alert("“提交失败，感应离开延迟时间超出限制范围，请重新配置")
             }
         }
